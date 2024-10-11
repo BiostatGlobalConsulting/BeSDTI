@@ -1,0 +1,111 @@
+---
+title: "Template BeSD Report - Childhood Vaccination"
+output: word_document
+---
+
+```{r, include = FALSE}
+
+library(flextable)
+library(dplyr)
+```
+
+
+# `r REPORT_TITLE`
+
+## Background
+
+Behavioural and social drivers of vaccination (BeSD) are “beliefs and experiences specific to vaccination that are potentially modifiable to increase vaccine uptake” [1]. The BeSD framework developed by the World Health Organization (WHO) groups these drivers into four domains [2]:
+
+-   **Thinking and feeling** about vaccines and vaccine-preventable diseases
+-   **Social processes** and norms that affect vaccine uptake
+-   **Motivation** (or hesitancy) to seek vaccination
+-   **Practical issues** involved in seeking and receiving vaccination, such as accessibility and cost
+
+The BeSD data collection tools developed by WHO are designed to explore each of these domains.
+
+*In this section, provide background information about the BeSD survey.*
+
+## Methods
+
+*Provide information about how data were collected:*
+
+-   *Sample design*
+-   *Age group included*
+
+*Provide information on the survey instrument. Did the questions asked follow the BeSD standards exactly? Did any questions need to be standardized? Were additional questions/modules included?*
+
+*Data were analysed using the WHO’s freely available Behavioural and Social Drivers of Vaccination: Tools for Impact (BeSD-TI) software \[3\]. BeSD-TI is designed to facilitate flexible and rigorous analysis of BeSD surveys.*
+
+## Results
+
+### Priority Indicators
+
+The BeSD priority indicators for childhood vaccination are:
+
+-   **Confidence in vaccine benefits** (thinking and feeling): percentage of parents/caregivers who think that vaccines are moderately or very important for their child’s health
+-   **Family norms** (social processes): percentage of parents/caregivers who think most of their close family and friends want their child to be vaccinated
+-   **Intention to get child vaccinated** (motivation): percentage of parents/caregivers who want their child to get all the recommended vaccines in their country’s immunization schedule
+-   **Knowing where to get vaccination** (practical issues): percentage of parents/caregivers who know where to get their child vaccinated
+-   **Affordability** (practical issues): percentage of parents/caregivers who say that vaccination is moderately or very easy to pay for
+
+
+
+```{r, results = 'asis', echo = FALSE}
+
+# TO DO 
+# - Ensure globals available when calling this qmd from the control program
+# - Assuming so, remove BESDTI_REPORT_INPUTS loading step above 
+# - Put this in a loop, checking if the row of BESDTI_REPORT_INPUTS is for a 
+# plot or a table 
+# - Call the child_plot document or the child_table document (to be created) 
+# depending on the row type 
+# - Have separate logic for priority indicator section - perhaps its own child
+# document that gets included if the relevant rows are in BESDTI_REPORT_INPUTS
+
+for(i in 1:nrow(inputs_working)){
+  input_i <- inputs_working[i,]
+  
+  sections_out <- list()
+  
+  if (!is.na(input_i$plot_path)){
+    section_new <- knitr::knit_child(
+      'besd_report_subsection_plot.rmd',
+      envir = environment(), quiet = TRUE
+    )
+    
+    cat(unlist(section_new), sep = "\n")
+    
+    # sections_out[[i]] <- section_new
+  } else {
+    
+    dat_i <- readRDS(input_i$rt_input_path) 
+    
+    
+    
+    section_new <- knitr::knit_child(
+      'besd_report_subsection_table.rmd',
+      envir = environment(), quiet = TRUE
+    )
+    
+    cat(unlist(section_new), sep = "\n")
+    # sections_out[[i]] <- section_new
+  }
+  
+}
+# 
+# # report_input_i <- BESDTI_REPORT_INPUTS[1,]
+# a <- knitr::knit_child('besd_report_child_plot.qmd', 
+#                   envir = environment(), quiet = TRUE)
+
+# cat(unlist(sections_out), sep = '\n')
+
+```
+
+
+## References
+
+[1] World Health Organization. (2022). Understanding the behavioural and social drivers of vaccine uptake WHO position paper – May 2022. Weekly Epidemiological Record vol. 97(20). <https://www.who.int/publications/i/item/who-wer9720-209-224>.
+
+[2] World Health Organization. (2022). Behavioural and social drivers of vaccination: tools and practical guidance for achieving high uptake. World Health Organization. <https://iris.who.int/handle/10665/354459>. License: CC BY-NC-SA 3.0 IGO
+
+[3] World Health Organization and Biostat Global Consulting. (2024). Behavioural and Social Drivers of Vaccination: Tools for Impact (BeSD-TI). (Add link to GitHub repository for BeSD-TI)

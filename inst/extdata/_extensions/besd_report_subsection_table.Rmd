@@ -1,0 +1,34 @@
+---
+output: word_document
+---
+
+### `r input_i$title`
+
+```{r, echo = FALSE}
+
+tabledat <- dat_i 
+drop_cols <- which(names(tabledat) %in% c(
+  "outputid", "title", "variable", "database_id", 
+  "analysis_counter", "order", "rowtype"))
+
+tabledat <- tabledat[,-drop_cols]
+
+names(tabledat)[1] <- "Stratum"
+
+span_rows <- which(dat_i$rowtype == "LABEL_ONLY") 
+pct_cols <- names(tabledat)[stringr::str_detect(names(tabledat), "%") & 
+                              !stringr::str_detect(names(tabledat), "95% CI")]
+
+for(i in 1:length(pct_cols)){
+  tabledat[[pct_cols[i]]] <- round(tabledat[[pct_cols[i]]], NUM_DECIMAL_DIGITS)
+}
+
+flextable::flextable(tabledat) %>% 
+  merge_h_range(., i = span_rows, j1 = 1, j2 = ncol(tabledat)) %>% 
+  align(., i = span_rows, align = "center") %>% 
+  set_table_properties(., layout = "autofit") %>% 
+  fontsize(., size = 9, part = "all")
+
+```
+
+\newpage 

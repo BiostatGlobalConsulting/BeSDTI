@@ -1,0 +1,37 @@
+---
+output: word_document
+---
+
+### `r input_i$title`
+
+
+```{r, echo = FALSE}
+
+if (input_i$indicator == "besd_ch_core"){
+  plot_stratifier_ref <- input_i$stratifier
+  
+  if (!is.na(plot_stratifier_ref)){
+    plot_intro_text <- paste0("The following bar plot summarizes the core indicator findings from this BeSD survey, stratified by ", plot_stratifier_ref, ".")
+  } else {
+    plot_intro_text <- paste0("The following bar plot summarizes the core indicator findings from this BeSD survey.")
+  }
+}
+
+# # TO DO update this to use a global 
+# BESD_CORE_PLOT_STRATIFIER_REF <- "child's gender"
+# 
+# plot_stratifier_text <- ifelse(
+#   !is.na(BESD_CORE_PLOT_STRATIFIER_REF),
+#   paste0("The following bar plot summarizes the core indicator findings from this BeSD survey, stratified by ", BESD_CORE_PLOT_STRATIFIER_REF, ":"),
+#   "The following bar plot summarizes the core indicator findings from this BeSD survey:"
+#   )
+
+# 
+
+```
+
+`r plot_intro_text`
+
+![](`r input_i$plot_path`)
+
+\newpage 
