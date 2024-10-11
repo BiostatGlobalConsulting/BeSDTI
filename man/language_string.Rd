@@ -17,3 +17,6 @@ A string
 \description{
 Get the specific string with the user required language
 }
+\examples{
+language_string("ENGLISH", str = "OS_304")
+}

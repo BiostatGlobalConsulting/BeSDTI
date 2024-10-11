@@ -4,7 +4,15 @@
 \alias{besd_report_setup}
 \title{Copy report template to output folder}
 \usage{
-besd_report_setup(template_name = NULL, outfile_name = NULL)
+besd_report_setup(template_path = NULL, outfile_path = NULL)
+}
+\arguments{
+\item{template_path}{Path to template to copy}
+
+\item{outfile_path}{Path where copy of template should be saved (usually in OUTPUT_FOLDER)}
+}
+\value{
+Template files copied to output folder
 }
 \description{
 Copy report template to output folder
