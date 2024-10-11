@@ -19,3 +19,6 @@ Template BeSD survey report
 \description{
 Make template BeSD survey report
 }
+\examples{
+besd_report(analysis = "child")
+}

@@ -8,7 +8,10 @@
 #' @import knitr
 #' @import rmarkdown
 #'
+#' @export
 #' @return Template BeSD survey report
+#'
+#' @examples besd_report(analysis = "child")
 
 besd_report <- function(
     VCP = "besd_report",
