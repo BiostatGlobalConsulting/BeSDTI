@@ -4,6 +4,8 @@ besd_report_setup <- function(
     template_name = NULL,
     outfile_name = NULL) {
 
+  browser()
+
   # Create folder for recursive copying into ahead of time
   if (!file.exists(paste0(OUTPUT_FOLDER, "/Report Template"))){
     dir.create(paste0(OUTPUT_FOLDER, "/Report Template"))
