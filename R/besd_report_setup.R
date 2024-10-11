@@ -22,15 +22,15 @@ besd_report_setup <- function(
     outfile_name = NULL) {
 
   # Create folder for recursive copying into ahead of time
-  if (!file.exists(paste0(OUTPUT_FOLDER, "/Report Template"))){
-    dir.create(paste0(OUTPUT_FOLDER, "/Report Template"))
+  if (!file.exists(paste0(OUTPUT_FOLDER, "/Report_Template"))){
+    dir.create(paste0(OUTPUT_FOLDER, "/Report_Template"))
   }
 
   # Copy template file from internals
   file.copy(
     from = system.file(paste0("extdata/_extensions/", template_name),
                        package = "BeSDTI"),
-    to = paste0(OUTPUT_FOLDER, "/Report Template/", outfile_name),
+    to = paste0(OUTPUT_FOLDER, "/Report_Template/", outfile_name),
     overwrite = TRUE,
     recursive = TRUE,
     copy.mode = TRUE

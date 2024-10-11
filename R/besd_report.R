@@ -29,8 +29,6 @@ besd_report <- function(
       )
     )
 
-  # saveRDS(inputs_working, paste0(OUTPUT_FOLDER, "/Report Inputs/Temp_Report_Inputs.rds"))
-
   # Include templates in package:
   # https://spencerschien.info/post/r_for_nonprofits/quarto_template/
 
@@ -54,6 +52,6 @@ besd_report <- function(
   }
 
   rmarkdown::render(
-    paste0(OUTPUT_FOLDER, "/Report Template/", report_filename))
+    paste0("Report_Template/", report_filename))
 
 }
