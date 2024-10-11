@@ -434,6 +434,13 @@ besd_core_plot <- function(
       variable_label,
       NA)
 
+    if (besd_object_exists("BESD_CORE_PLOT_STRATIFIER")){
+      if (!is.na(varlabel_out)){
+        besd_global(BESD_CORE_PLOT_STRATIFIER_LABEL, varlabel_out)
+      } else {
+        besd_global(BESD_CORE_PLOT_STRATIFIER_LABEL, BESD_CORE_PLOT_STRATIFIER)
+      }
+    }
     stratified_out <- ifelse(
       besd_object_exists("BESD_CORE_PLOT_STRATIFIER"),
       TRUE, FALSE)

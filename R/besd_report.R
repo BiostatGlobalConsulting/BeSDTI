@@ -20,6 +20,8 @@ besd_report <- function(
     analysis
 ){
 
+  besd_log_comment(VCP, 5, "Flow", "Starting")
+
   inputs_working <- BESDTI_REPORT_INPUTS %>%
     mutate(
       rt_input_path = stringr::str_remove(database_path, "_database.rds"),

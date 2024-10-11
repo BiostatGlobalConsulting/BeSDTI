@@ -9,21 +9,8 @@ library(flextable)
 library(dplyr)
 ```
 
-```{r, echo = FALSE}
-# TO DO update this to use a global 
-report_title <- "Harmonia 2024 BeSD Survey Report"
 
-# TO DO update this to use a global 
-BESD_CORE_PLOT_STRATIFIER_REF <- "child's gender"
-
-plot_stratifier_text <- ifelse(
-  !is.na(BESD_CORE_PLOT_STRATIFIER_REF),
-  paste0("The following bar plot summarizes the core indicator findings from this BeSD survey, stratified by ", BESD_CORE_PLOT_STRATIFIER_REF, ":"),
-  "The following bar plot summarizes the core indicator findings from this BeSD survey:"
-  )
-```
-
-# `r report_title`
+# `r REPORT_TITLE`
 
 ## Background
 
@@ -61,7 +48,7 @@ The BeSD priority indicators for childhood vaccination are:
 -   **Knowing where to get vaccination** (practical issues): percentage of parents/caregivers who know where to get their child vaccinated
 -   **Affordability** (practical issues): percentage of parents/caregivers who say that vaccination is moderately or very easy to pay for
 
-`r plot_stratifier_text`
+
 
 ```{r, results = 'asis', echo = FALSE}
 

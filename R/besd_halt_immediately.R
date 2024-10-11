@@ -79,6 +79,16 @@ besd_halt_immediately <- function(
       }
     }
 
+    # Clean up after report template programs
+    if (MAKE_TEMPLATE_REPORT == 1){
+      unlink(paste0(OUTPUT_FOLDER, "/Report Inputs"), recursive = TRUE)
+      temp_rmd <- list.files(paste0(OUTPUT_FOLDER, "/Report_Template"))
+      temp_rmd <- temp_rmd[stringr::str_detect(temp_rmd, ".Rmd")]
+      for (tr in seq_along(temp_rmd)){
+        file.remove(paste0(OUTPUT_FOLDER, "/Report_Template/", temp_rmd[tr]))
+      }
+    }
+
     # **************************************************************************
     # Delete BeSD-TI temp datasets if the user requests it. Most of the measures
     # clean up after themselves, but there are some temporary datasets that

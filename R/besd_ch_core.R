@@ -25,7 +25,8 @@
 # TO DO - use relabel options to bring in multilingual strings??
 # TO DO - add logic re: generating plots, tables
 
-besd_ch_core <- function(VCP = "besd_ch_core"){
+besd_ch_core <- function(VCP = "besd_ch_core",
+                         cleanup = TRUE){
 
   besd_log_comment(VCP, 5, "Flow", "Starting")
 
@@ -623,6 +624,10 @@ besd_ch_core <- function(VCP = "besd_ch_core"){
         to = paste0(OUTPUT_FOLDER, "/Report Inputs/", plot_name)
       )
 
+      if (!besd_object_exists("BESD_CORE_PLOT_STRATIFIER_LABEL")){
+        BESD_CORE_PLOT_STRATIFIER_LABEL <- NA
+      }
+
       temp_report_row <- data.frame(
         indicator = "besd_ch_core",
         variable = NA,
@@ -630,16 +635,40 @@ besd_ch_core <- function(VCP = "besd_ch_core"){
         title = "BeSD Core Indicator Plot",
         database_id = NA,
         database_path = NA,
-        plot_path = paste0(OUTPUT_FOLDER, "/Report Inputs/", plot_name)
+        plot_path = paste0(OUTPUT_FOLDER, "/Report Inputs/", plot_name),
+        stratifier = BESD_CORE_PLOT_STRATIFIER_LABEL,
+        analysis_counter = ANALYSIS_COUNTER
       )
+
+      rm(list = ls(
+        pattern = "^BESD_CORE_PLOT_STRATIFIER_LABEL", envir = .GlobalEnv),
+        envir = .GlobalEnv)
 
       BESDTI_REPORT_INPUTS <- bind_rows(temp_report_row,
                                         BESDTI_REPORT_INPUTS)
 
+
+      BESDTI_REPORT_INPUTS <- BESDTI_REPORT_INPUTS %>%
+        mutate(tempsort = row_number()) %>%
+        arrange(analysis_counter, tempsort) %>%
+        select(-tempsort)
+
       assign("BESDTI_REPORT_INPUTS", BESDTI_REPORT_INPUTS, envir = .GlobalEnv)
     }
 
-  besd_log_comment(VCP, 5, "Flow", "Exiting")
+
+    # Clean out core indicator globals
+    if (cleanup == TRUE){
+      rm(list = c(
+        "BESD_CORE_WEIGHTED",
+        "BESD_CORE_DENOMINATOR",
+        "BESD_CORE_TABLE_STRUCTURE",
+        "BESD_CORE_PLOT_STRATIFIER",
+        "BESD_CORE_PLOT_COLORS"
+      ), envir = .GlobalEnv) %>% suppressWarnings()
+    }
+
+    besd_log_comment(VCP, 5, "Flow", "Exiting")
 }
 
 
