@@ -51,7 +51,9 @@ besd_report <- function(
 
   }
 
+  setwd(OUTPUT_FOLDER)
   rmarkdown::render(
     paste0("Report_Template/", report_filename))
+  setwd(DATA_FOLDER)
 
 }
