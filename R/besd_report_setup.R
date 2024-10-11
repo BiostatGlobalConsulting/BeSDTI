@@ -1,8 +1,25 @@
 #' Copy report template to output folder
+#'
+#' @param template_path Path to template to copy
+#' @param outfile_path Path where copy of template should be saved (usually in OUTPUT_FOLDER)
+#'
+#' @return Template files copied to output folder
+#'
+#' @export
+#'
+
+# besd_report_setup R version 1.00 - Biostat Global Consulting - 2024-10-11
+# *******************************************************************************
+# Change log
+
+# Date 			  Version 	Name			      What Changed
+# 2024-10-11  1.00      Caitlin Clary   Original version
+# *******************************************************************************
+
 
 besd_report_setup <- function(
-    template_name = NULL,
-    outfile_name = NULL) {
+    template_path = NULL,
+    outfile_path = NULL) {
 
   browser()
 
@@ -13,9 +30,9 @@ besd_report_setup <- function(
 
   # Copy template file from internals
   file.copy(
-    from = system.file(paste0("extdata/_extensions/", template_name),
+    from = system.file(paste0("extdata/_extensions/", template_path),
                        package = "BeSDTI"),
-    to = paste0(OUTPUT_FOLDER, "/Report Template/", outfile_name),
+    to = paste0(OUTPUT_FOLDER, "/Report Template/", outfile_path),
     overwrite = TRUE,
     recursive = TRUE,
     copy.mode = TRUE
