@@ -32,6 +32,22 @@ besd_report <- function(
 
   if (analysis == "child"){
 
+    report_filename <- paste0("BeSD Template Report - Child Vaccination_",
+                              ANALYSIS_COUNTER, "_", Sys.Date, ".Rmd")
+
+    # Copy template .Rmd files
+    besd_report_setup(template_name = "besd_report_subsection_plot.Rmd",
+                      outfile_name = "besd_report_subsection_plot.Rmd")
+
+    besd_report_setup(template_name = "besd_report_subsection_table.Rmd",
+                      outfile_name = "besd_report_subsection_table.Rmd")
+
+    besd_report_setup(
+      template_name = "besd_child_vx_report_template.Rmd",
+      outfile_name = report_filename)
+
   }
+
+  rmarkdown::render(report_filename)
 
 }
