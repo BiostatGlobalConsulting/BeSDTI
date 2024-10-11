@@ -1,0 +1,35 @@
+Package: BeSDTI
+Title: Behavioral and Social Drivers of Vaccination: Tools for Inference
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Dale", "Rhoda", ,"Dale.Rhoda@biostatglobal.com", 
+        role = "aut", 
+        comment = c(ORCID = "0000-0003-0948-1368")),
+    person("Caitlin", "Clary", ,"Caitlin.Clary@biostatglobal.com", 
+        role = c("aut", "cre"),
+        comment = c(ORCID = "0000-0001-7283-749X"))
+    )
+Description: Behavioral and Social Drivers of Vaccination: Tools for Inference 
+    (BeSD-TI) is an open source group of programs meant to analyze data from 
+    BeSD surveys. BeSD-TI conducts analyses consistent with guidance from the 
+    World Health Organization. 
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Imports: 
+    dplyr,
+    ggplot2,
+    haven,
+    knitr,
+    openxlsx,
+    readr,
+    rlang,
+    rmarkdown,
+    stringr,
+    survey,
+    tidyselect
