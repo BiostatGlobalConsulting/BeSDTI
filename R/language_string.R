@@ -9,6 +9,8 @@
 #'
 #' @import openxlsx
 #' @import stringr
+#'
+#' @examples language_string("ENGLISH", str = "OS_304")
 
 # language_string R version 1.01 - Biostat Global Consulting - 024-09-03
 # *******************************************************************************
