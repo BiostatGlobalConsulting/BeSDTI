@@ -20,7 +20,7 @@ pct_cols <- names(tabledat)[stringr::str_detect(names(tabledat), "%") &
                               !stringr::str_detect(names(tabledat), "95% CI")]
 
 for(i in 1:length(pct_cols)){
-  tabledat[[pct_cols[i]]] <- round(tabledat[[pct_cols[i]]], 1)
+  tabledat[[pct_cols[i]]] <- round(tabledat[[pct_cols[i]]], NUM_DECIMAL_DIGITS)
 }
 
 flextable::flextable(tabledat) %>% 

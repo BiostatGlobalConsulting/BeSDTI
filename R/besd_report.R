@@ -7,6 +7,7 @@
 #' @import dplyr
 #' @import knitr
 #' @import rmarkdown
+#' @import stringr
 #'
 #' @export
 #' @return Template BeSD survey report
@@ -36,8 +37,8 @@ besd_report <- function(
   if (analysis == "child"){
 
     report_filename <- paste0(
-      "BeSD Template Report - Child Vaccination_",
-      ANALYSIS_COUNTER, "_", Sys.Date(), ".Rmd")
+      "BeSD_Template_Report_Child_Vaccination_", ANALYSIS_COUNTER, "_",
+      stringr::str_replace_all(Sys.Date(), "-", "_"), ".Rmd")
 
     # Copy template .Rmd files
     besd_report_setup(template_name = "besd_report_subsection_plot.Rmd",
