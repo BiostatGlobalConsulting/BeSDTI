@@ -225,8 +225,8 @@ BESD_DESC_03_05TOST <- function(VCP = "BESD_DESC_03_05TOST",
                            "order", "rowtype")
 
     saveRDS(RT_DESC_03, rt_db_name)
-    besd_global(REPORT_INDICATOR_LIST, c(REPORT_INDICATOR_LIST, rt_db_name))
-    besd_global(REPORT_INDICATOR_TITLE_LIST, c(REPORT_INDICATOR_TITLE_LIST, DESC_03_TO_TITLE))
+    # besd_global(REPORT_INDICATOR_LIST, c(REPORT_INDICATOR_LIST, rt_db_name))
+    # besd_global(REPORT_INDICATOR_TITLE_LIST, c(REPORT_INDICATOR_TITLE_LIST, DESC_03_TO_TITLE))
   }
 
   rm(list = c("TO_DESC_03", "TO_DESC_03_columnlabel", "TO_DESC_03_formatnum",

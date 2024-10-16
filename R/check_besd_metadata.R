@@ -58,6 +58,34 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
   exitflag <- 0
   errormsgs <- NULL
 
+  if (MAKE_TEMPLATE_REPORT == 1){
+
+    # Initiate object for tracking report inputs
+    assign("BESDTI_REPORT_INPUTS", NULL, envir = .GlobalEnv)
+
+    # Start some lists used for report compilation (not currently using)
+    # besd_global(REPORT_INDICATOR_LIST, NULL)
+    # besd_global(REPORT_INDICATOR_TITLE_LIST, NULL)
+
+    if (EXPORT_TO_EXCEL != 1){
+      newerror <- "To make a template report (MAKE_TEMPLATE_REPORT = 1), BeSD-TI requires that the EXPORT_TO_EXCEL option be turned on. Please set besd_global(EXPORT_TO_EXCEL, 1) in the control program or turn the MAKE_TEMPLATE_REPORT option off."
+
+      errormsgs <- c(errormsgs, newerror)
+
+      exitflag <- 1
+      besd_log_comment(VCP, 1, "Error", newerror)
+    }
+
+    if (MAKE_PLOTS != 1){
+      newerror <- "To make a template report (MAKE_TEMPLATE_REPORT = 1), BeSD-TI requires that the MAKE_PLOTS option be turned on. Please set besd_global(MAKE_PLOTS, 1) in the control program or turn the MAKE_TEMPLATE_REPORT option off."
+
+      errormsgs <- c(errormsgs, newerror)
+
+      exitflag <- 1
+      besd_log_comment(VCP, 1, "Error", newerror)
+    }
+  }
+
   if (analysis == "child"){
     # Add logic: checks for child vaccination BeSD analysis
 

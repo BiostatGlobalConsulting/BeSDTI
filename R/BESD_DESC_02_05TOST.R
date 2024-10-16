@@ -241,8 +241,8 @@ BESD_DESC_02_05TOST <- function(VCP = "BESD_DESC_02_05TOST",
                              "order", "rowtype")
 
       saveRDS(RT_DESC_02, rt_db_name)
-      besd_global(REPORT_INDICATOR_LIST, c(REPORT_INDICATOR_LIST, rt_db_name))
-      besd_global(REPORT_INDICATOR_TITLE_LIST, c(REPORT_INDICATOR_TITLE_LIST, DESC_02_TO_TITLE))
+      # besd_global(REPORT_INDICATOR_LIST, c(REPORT_INDICATOR_LIST, rt_db_name))
+      # besd_global(REPORT_INDICATOR_TITLE_LIST, c(REPORT_INDICATOR_TITLE_LIST, DESC_02_TO_TITLE))
     }
 
     vid = vid + 1
