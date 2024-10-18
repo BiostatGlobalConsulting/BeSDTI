@@ -104,8 +104,8 @@ for(i in 1:nrow(inputs_working)){
 
 ## References
 
-[1] World Health Organization. (2022). Understanding the behavioural and social drivers of vaccine uptake WHO position paper – May 2022. Weekly Epidemiological Record vol. 97(20). <https://www.who.int/publications/i/item/who-wer9720-209-224>.
+[1] World Health Organization. (2022). Understanding the behavioural and social drivers of vaccine uptake. WHO position paper – May 2022. Weekly Epidemiological Record vol. 97(20). <https://www.who.int/publications/i/item/who-wer9720-209-224>.
 
-[2] World Health Organization. (2022). Behavioural and social drivers of vaccination: tools and practical guidance for achieving high uptake. World Health Organization. <https://iris.who.int/handle/10665/354459>. License: CC BY-NC-SA 3.0 IGO
+[2] World Health Organization. (2022). Behavioural and social drivers of vaccination: tools and practical guidance for achieving high uptake. <https://iris.who.int/handle/10665/354459>. License: CC BY-NC-SA 3.0 IGO
 
-[3] World Health Organization and Biostat Global Consulting. (2024). Behavioural and Social Drivers of Vaccination: Tools for Impact (BeSD-TI). (Add link to GitHub repository for BeSD-TI)
+[3] World Health Organization and Biostat Global Consulting. (2024). Behavioural and Social Drivers of Vaccination: Tools for Impact (BeSD-TI). <https://github.com/BiostatGlobalConsulting/BeSDTI>
