@@ -317,7 +317,7 @@ besd_core_plot <- function(
 
   # Set some default values
   if (!besd_object_exists("BESD_CORE_PLOT_SHOW_HEADERS")){
-    besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 0)
+    besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 1)
   }
 
   # Background colors ----
