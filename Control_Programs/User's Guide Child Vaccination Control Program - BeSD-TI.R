@@ -290,8 +290,8 @@ besd_global(BESD_CORE_PLOT_COLORS, NA)
 # besd_global(BESD_CORE_PLOT_CAPTION, "")
 
 # Add headers to the core indicator bar plot specifying which construct each
-# core indicator is measuring? Set to 1 to turn headers on.
-besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 0)
+# core indicator is measuring? Set to 1 to show headers (recommended)
+besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 1)
 
 
 besd_ch_core(cleanup = TRUE)

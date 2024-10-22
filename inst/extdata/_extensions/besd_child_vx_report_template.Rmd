@@ -34,7 +34,7 @@ The BeSD data collection tools developed by WHO are designed to explore each of 
 
 *Provide information on the survey instrument. Did the questions asked follow the BeSD standards exactly? Did any questions need to be standardized? Were additional questions/modules included?*
 
-*Data were analysed using the WHO’s freely available Behavioural and Social Drivers of Vaccination: Tools for Impact (BeSD-TI) software \[3\]. BeSD-TI is designed to facilitate flexible and rigorous analysis of BeSD surveys.*
+Data were analysed using the WHO’s freely available Behavioural and Social Drivers of Vaccination: Tools for Impact (BeSD-TI) software [3]. BeSD-TI is designed to facilitate flexible and rigorous analysis of BeSD surveys.
 
 ## Results
 
