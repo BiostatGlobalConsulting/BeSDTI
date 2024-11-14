@@ -5,24 +5,40 @@
 #'
 #' @import dplyr
 #' @import ggplot2
+#' @import stringr
+#' @import ggpattern
 #'
 #' @return Core indicator barplot
+#'
+# besd_core_plot R version 1.01 - Biostat Global Consulting - 2024-10-29
+
+# *******************************************************************************
+# Change log
+
+# Date 			  Version 	Name			      What Changed
+# 2024-07-23  1.00      Caitlin Clary   Original R version
+# 2024-10-29  1.01      Caitlin Clary   Add footnotes explaining denominator and
+#                                       weight options, fix process to specify
+#                                       color for unstratified bar plot
+# 2024-11-04  1.02      Caitlin Clary   Add options to suppress or annotate
+#                                       results depending on N
+# *******************************************************************************
+
+# TO DO - avoid dropping unused levels when suppressing results - could just set
+# percent to 0 - maybe add a star or something to signify when a level has been
+# dropped
+
+# Also want to make footnote printing *contingent* on whether any bars actually
+# suppressed/annotated
+
+# Also want to try to get ggpattern working for annotating bars with small sample size
+
+xlab_wrap <- 23
 
 besd_core_plot <- function(
     VCP = "besd_core_plot",
     analysis
 ){
-
-  # TO DO - headers should be analysis dependent. Maybe make data frame up top
-  # where core_outcomes object defined - add labels, then later join onto
-  # plotdat, and then select outcome + header and keep unique to create
-  # headerdat.
-
-  # TO DO logic when too few manual colors defined. Revert to defaults? Error?
-
-  # TO DO BESD_CORE_PLOT_STRUCTURE is not defined - not sure this needs to be
-  # implemented now, but if not implemented, need to remove check for that
-  # global
 
   # Define dataset and outcomes ----
   if (analysis == "child"){
@@ -46,30 +62,30 @@ besd_core_plot <- function(
       # important for their child's health
       language_string(
         language_use = language_use, str = "OS_B27") %>%
-        stringr::str_wrap(., 25),
+        stringr::str_wrap(., xlab_wrap),
 
       # % of parents/caregivers who say most of their close family and friends
       # want their child to be vaccinated
       language_string(
         language_use = language_use, str = "OS_B28") %>%
-        stringr::str_wrap(., 25),
+        stringr::str_wrap(., xlab_wrap),
 
       # % of parents/caregivers who want their child to get all of the
       # recommended vaccines
       language_string(
         language_use = language_use, str = "OS_B26") %>%
-        stringr::str_wrap(., 25),
+        stringr::str_wrap(., xlab_wrap),
 
       # % of parents/caregivers who know where to get their child vaccinated
       language_string(
         language_use = language_use, str = "OS_B29") %>%
-        stringr::str_wrap(., 25),
+        stringr::str_wrap(., xlab_wrap),
 
       # % of parents/caregivers who say vaccination is moderately or very easy
       # to pay for
       language_string(
         language_use = language_use, str = "OS_B30") %>%
-        stringr::str_wrap(., 25)
+        stringr::str_wrap(., xlab_wrap)
     )
 
     header_labels <- c(
@@ -100,6 +116,83 @@ besd_core_plot <- function(
     )
 
   } # end if analysis == "child"
+
+  if (analysis == "covid"){
+
+    plot_name <- paste0(
+      "BeSD_Core_", "COVID_", ANALYSIS_COUNTER, ".png"
+    )
+
+    dat <- readRDS(paste0(OUTPUT_FOLDER, "/besd_covid_core_", ANALYSIS_COUNTER, ".rds"))
+
+    core_outcomes <- c(
+      "COV_confb_binary",
+      "COV_normf_binary",
+      "COV_intent_binary",
+      "COV_where_binary",
+      "COV_afford_binary"
+    )
+
+    core_outcome_labels <- c(
+      # % of adults/health workers who say a COVID-19 vaccine is moderately or
+      # very important for their health
+      language_string(
+        language_use = language_use, str = "OS_B47") %>%
+        stringr::str_wrap(., xlab_wrap),
+
+      # % of adults/health workers who say most of their close family and
+      # friends want them to get a COVID-19 vaccine
+      language_string(
+        language_use = language_use, str = "OS_B48") %>%
+        stringr::str_wrap(., xlab_wrap),
+
+      # % of adults/health workers who say they want to get a COVID-19 vaccine
+      # or are already vaccinated
+      language_string(
+        language_use = language_use, str = "OS_B49") %>%
+        stringr::str_wrap(., xlab_wrap),
+
+      # % of adults/health workers who say they know where to get a COVID-19
+      # vaccine for themselves
+      language_string(
+        language_use = language_use, str = "OS_B50") %>%
+        stringr::str_wrap(., xlab_wrap),
+
+      # % of adults/health workers who say COVID-19 vaccination is moderately or
+      # very easy to pay for
+      language_string(
+        language_use = language_use, str = "OS_B51") %>%
+        stringr::str_wrap(., xlab_wrap)
+    )
+
+    header_labels <- c(
+      # Confidence in vaccine benefits
+      language_string(
+        language_use = language_use, str = "OS_B38"
+      ) %>% stringr::str_wrap(., 16),
+
+      # Family norms
+      language_string(
+        language_use = language_use, str = "OS_B39"
+      ) %>% stringr::str_wrap(., 16),
+
+      # Intention to get vaccinated
+      language_string(
+        language_use = language_use, str = "OS_B52"
+      ) %>% stringr::str_wrap(., 16),
+
+      # Know where to get vaccinated
+      language_string(
+        language_use = language_use, str = "OS_B41"
+      ) %>% stringr::str_wrap(., 16),
+
+      # Affordability
+      language_string(
+        language_use = language_use, str = "OS_B42"
+      ) %>% stringr::str_wrap(., 16)
+    )
+
+  } # end if analysis == "covid"
 
   # Define survey design syntax ----
   if (str_to_upper(BESD_CORE_WEIGHTED) == "YES"){
@@ -172,6 +265,8 @@ besd_core_plot <- function(
   # Define stratifier ----
   if (besd_object_exists("BESD_CORE_PLOT_STRATIFIER")){
     dvar <- get(BESD_CORE_PLOT_STRATIFIER, dat)
+
+    # dvar <- factor(dvar)
 
     variable_label <- ifelse(
       !is.null(attributes(dvar)$label),
@@ -248,7 +343,6 @@ besd_core_plot <- function(
           besd_global(BESD_CORE_PLOT_COLORS, NA)
 
         }
-
       }
     } else {
       if (length(manual_plot_cols) != 1){
@@ -262,6 +356,13 @@ besd_core_plot <- function(
       }
     }
 
+  }
+
+  # Set default color for unstratified bar plot
+  if (!besd_object_exists("BESD_CORE_PLOT_STRATIFIER")){
+    if (!exists("manual_plot_cols")){
+      manual_plot_cols <- "grey80"
+    }
   }
 
   # Generate plot data ----
@@ -300,8 +401,55 @@ besd_core_plot <- function(
       outcome_temp = outcome,
       outcome = factor(outcome, levels = core_outcomes,
                        labels = core_outcome_labels),
-      label = as.character(label))
+      label = as.character(label),
+      estimate_plot = estimate)
 
+  if (besd_object_exists("BESD_CORE_PLOT_SUPPRESS_LOW_N")){
+
+    if (is.numeric(as.numeric(BESD_CORE_PLOT_SUPPRESS_LOW_N))){
+
+      plotdat <- plotdat %>%
+        mutate(suppress = ifelse(n < BESD_CORE_PLOT_SUPPRESS_LOW_N, 1, 0),
+               estimate_plot = ifelse(suppress == 1, 0, estimate_plot))
+
+      footnote_suppress <- paste0(
+        "Results are suppressed when n < ", BESD_CORE_PLOT_SUPPRESS_LOW_N
+      )
+
+    } else {
+      # Add warning message when suppress isn't a number
+
+      footnote_suppress <- NULL
+
+      plotdat <- plotdat %>% mutate(suppress = 0)
+    }
+  } else {
+    footnote_suppress <- NULL
+    plotdat <- plotdat %>% mutate(suppress = 0)
+  }
+
+  if (besd_object_exists("BESD_CORE_PLOT_ANNOTATE_LOW_N")){
+
+    if (is.numeric(as.numeric(BESD_CORE_PLOT_ANNOTATE_LOW_N))){
+
+      plotdat <- plotdat %>%
+        mutate(annotate = ifelse(n < BESD_CORE_PLOT_ANNOTATE_LOW_N, 1, 0))
+
+      footnote_annotate <- paste0(
+        "Results are annotated when n < ", BESD_CORE_PLOT_ANNOTATE_LOW_N
+      )
+
+    } else {
+      # Add warning message when annotate isn't a number
+
+      footnote_annotate <- NULL
+
+      plotdat <- plotdat %>% mutate(annotate = 0)
+    }
+  } else {
+    footnote_annotate <- NULL
+    plotdat <- plotdat %>% mutate(annotate = 0)
+  }
 
   headerdat <- plotdat %>%
     select(outcome_temp, outcome) %>% unique() %>%
@@ -319,6 +467,46 @@ besd_core_plot <- function(
   if (!besd_object_exists("BESD_CORE_PLOT_SHOW_HEADERS")){
     besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 1)
   }
+
+  # Define plot footnotes
+  if (stringr::str_to_upper(BESD_CORE_WEIGHTED) == "YES"){
+    besd_global(core_plot_footnote1,
+                language_string(language_use = language_use, str = "OS_B43"))
+  }
+
+  if (stringr::str_to_upper(BESD_CORE_WEIGHTED) == "NO"){
+    besd_global(core_plot_footnote1,
+                language_string(language_use = language_use, str = "OS_B43"))
+  }
+
+  if (stringr::str_to_upper(BESD_CORE_DENOMINATOR) == "ALL"){
+    besd_global(core_plot_footnote2,
+                language_string(language_use = language_use, str = "OS_B45"))
+  }
+
+  if (stringr::str_to_upper(BESD_CORE_DENOMINATOR) == "RESPONDED"){
+    besd_global(core_plot_footnote2,
+                language_string(language_use = language_use, str = "OS_B46"))
+  }
+
+  core_plot_footnote <- paste(core_plot_footnote1, core_plot_footnote2, sep = "\n")
+
+  if (besd_object_exists("BESD_CORE_PLOT_CAPTION")){
+    core_plot_footnote <- paste(BESD_CORE_PLOT_CAPTION, core_plot_footnote, sep = "\n")
+  }
+
+  if (besd_object_exists("BESD_CORE_PLOT_SUPPRESS_LOW_N")){
+    core_plot_footnote <- paste(
+      core_plot_footnote, footnote_suppress, sep = "\n"
+    )
+  }
+
+  if (besd_object_exists("BESD_CORE_PLOT_ANNOTATE_LOW_N")){
+    core_plot_footnote <- paste(
+      core_plot_footnote, footnote_annotate, sep = "\n"
+    )
+  }
+
 
   # Background colors ----
 
@@ -378,10 +566,12 @@ besd_core_plot <- function(
         panel.grid.minor.y = element_blank(),
         legend.text = element_text(size = axis_text_size)
       ) +
-      {if (besd_object_exists("BESD_CORE_PLOT_CAPTION")) labs(
-        caption = BESD_CORE_PLOT_CAPTION)} +
-      {if (BESD_CORE_PLOT_SHOW_HEADERS %in% 1) geom_text(data = headerdat,
-        aes(y = 107, x = outcome, label = header_label), fontface = "bold", size = header_size)}
+      # {if (besd_object_exists("BESD_CORE_PLOT_CAPTION")) labs(
+      #   caption = BESD_CORE_PLOT_CAPTION)} +
+      {if (BESD_CORE_PLOT_SHOW_HEADERS %in% 1) geom_text(
+        data = headerdat,
+        aes(y = 107, x = outcome, label = header_label), fontface = "bold", size = header_size)} +
+      labs(caption = core_plot_footnote)
   } else {
     pl_out <- ggplot(data = plotdat) +
       geom_rect(data = core_shading,
@@ -392,7 +582,7 @@ besd_core_plot <- function(
       geom_bar(
         aes(y = 100*estimate, x = outcome),
         stat = "identity", position = "dodge",
-        fill = "grey70", color = "grey10") +
+        fill = manual_plot_cols, color = "grey10") +
       scale_y_continuous(limits = c(0, plot_ymax),
                          breaks = c(0, 25, 50, 75, 100)) +
       xlab("") + ylab("") +
@@ -406,10 +596,12 @@ besd_core_plot <- function(
         panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_blank()
       ) +
-      {if (besd_object_exists("BESD_CORE_PLOT_CAPTION")) labs(
-        caption = BESD_CORE_PLOT_CAPTION)} +
-      {if (BESD_CORE_PLOT_SHOW_HEADERS %in% 1) geom_text(data = headerdat,
-        aes(y = 105, x = outcome, label = header_label), fontface = "bold", size = header_size)}
+      # {if (besd_object_exists("BESD_CORE_PLOT_CAPTION")) labs(
+      #   caption = BESD_CORE_PLOT_CAPTION)} +
+      {if (BESD_CORE_PLOT_SHOW_HEADERS %in% 1) geom_text(
+        data = headerdat,
+        aes(y = 105, x = outcome, label = header_label), fontface = "bold", size = header_size)} +
+      labs(caption = core_plot_footnote)
   }
 
   if (!dir.exists(paste0(OUTPUT_FOLDER, "/Plots_CORE"))){
