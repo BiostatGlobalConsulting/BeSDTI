@@ -92,7 +92,7 @@ BESD_DESC_02_03DV <- function(VCP = "BESD_DESC_02_03DV", database_id = NA){
       vtype <- "string"
     }
 
-    if (class(var) %in% c("numeric", "integer")){
+    if (class(var) %in% c("numeric", "integer", "double")){
       vtype <- "number"
     }
 
@@ -122,13 +122,6 @@ BESD_DESC_02_03DV <- function(VCP = "BESD_DESC_02_03DV", database_id = NA){
         dat$tempvar1 <- haven::labelled(dat$tempvar1, label = llist[l]) %>%
           suppressWarnings()
       }
-
-      # if (vtype == "number"){
-      #   if (length(which(labels$values %in% llist[l])) > 0){
-      #     m <- which(labels$values %in% llist[l])
-      #     dat$tempvar1 <- haven::labelled(dat$tempvar1, label = lalist[m]) %>% suppressWarnings()
-      #   }
-      # }
 
       # Updated 2023-11-10 - labels object only has 'values' slot if the
       # original variable had value labels; make robust to unlabeled variables
@@ -223,7 +216,7 @@ BESD_DESC_02_03DV <- function(VCP = "BESD_DESC_02_03DV", database_id = NA){
 
     } else {
       rm(list = c(paste0("DESC_02_ST_COUNT_", vcounter)), envir = .GlobalEnv) %>% suppressWarnings()
-    }# end of check DESC_02_N_SUBTOTALS
+    } # end of check DESC_02_N_SUBTOTALS
 
     vcounter = vcounter+1
 

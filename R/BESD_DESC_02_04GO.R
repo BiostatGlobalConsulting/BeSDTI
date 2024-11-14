@@ -13,6 +13,8 @@
 # Date 			  Version 	Name			      What Changed
 # 2024-08-08  1.00      Caitlin Clary   Original R version adapted from v1.00 of
 #                                       DESC_02_04GO in vcqiR
+# 2024-10-23  1.01      Caitlin Clary   Use variable name as label if the
+#                                       variable itself is unlabeled
 # *******************************************************************************
 
 
@@ -35,7 +37,12 @@ BESD_DESC_02_04GO <- function(VCP = "BESD_DESC_02_04GO", database_id = NA){
     }
 
     tempvar <- get(DESC_02_VARIABLES[d], dat)
-    varlabel <- attr(tempvar, "label")
+    varlabel <- attr(tempvar, "label", exact = TRUE)
+
+    # Use the variable name for the table title if the variable is unlabeled
+    if (is.null(varlabel)){
+      varlabel <- DESC_02_VARIABLES[d]
+    }
 
     make_DESC_0203_output_database(
       variable = DESC_02_VARIABLES[d],
