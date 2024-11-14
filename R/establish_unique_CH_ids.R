@@ -34,6 +34,7 @@ establish_unique_CH_ids <- function(VCP = "establish_unique_CH_ids"){
 
     # Merge cluster metadata if defined
     if (besd_object_exists("CM_DATASET")){
+
       cm <- besd_read(paste0(DATA_FOLDER, "/", CM_DATASET)) %>%
         mutate(dataframe = "cm") %>%
         select(stratum_id, stratum_name, cluster_id, cluster_name, province_id,

@@ -57,11 +57,6 @@ BESD_DESC_02 <- function(VCP = "BESD_DESC_02",
     BESD_DESC_02_05TOST(database_id = database_id)
   }
 
-  # if (MAKE_TEMPLATE_REPORT %in% 1){
-  #   print("Preparing report components")
-  #   BESD_DESC_02_07RT(database_id = database_id)
-  # }
-
   # Clear out globals if specified
   if (cleanup == TRUE){
     rm(list = c("DESC_02_DATASET", "DESC_02_VARIABLES",

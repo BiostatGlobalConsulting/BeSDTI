@@ -451,9 +451,6 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   # Subtotals: set placement of subtotal columns
   if (BESD_CORE_TABLE_STRUCTURE %in% 3){
 
-    # besd_global(DESC_02_SUBTOTAL_LABEL_1, "Subtotal: Not at all or a little easy")
-    # besd_global(DESC_02_SUBTOTAL_LABEL_2, "Subtotal: Moderately or very easy")
-
     besd_global(DESC_02_SUBTOTAL_LABEL_1,
                 paste0(
                   # "Subtotal: "
