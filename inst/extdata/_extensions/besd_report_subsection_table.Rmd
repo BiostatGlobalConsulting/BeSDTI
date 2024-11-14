@@ -6,6 +6,28 @@ output: word_document
 
 ```{r, echo = FALSE}
 
+if (!is.na(input_i$subtitle)){
+  rep_subtitle <- input_i$subtitle
+} else {
+  rep_subtitle <- NULL
+}
+
+if (!is.na(input_i$notes)){
+  rep_notes <- input_i$notes
+} else {
+  rep_notes <- NULL
+}
+
+```
+
+
+
+```{r, echo = FALSE}
+
+# Note - idea for handling duplicated column names (e.g. repeated 95% CI columns) - create custom header row and delete default header 
+# https://stackoverflow.com/questions/50748232/same-column-names-in-flextable-in-r
+# Current behavior is to add .1, .2, etc. to the end of duplicated names 
+
 tabledat <- dat_i 
 drop_cols <- which(names(tabledat) %in% c(
   "outputid", "title", "variable", "database_id", 
@@ -16,19 +38,54 @@ tabledat <- tabledat[,-drop_cols]
 names(tabledat)[1] <- "Stratum"
 
 span_rows <- which(dat_i$rowtype == "LABEL_ONLY") 
+nonspan_rows <- which(dat_i$rowtype != "LABEL_ONLY") 
+
 pct_cols <- names(tabledat)[stringr::str_detect(names(tabledat), "%") & 
                               !stringr::str_detect(names(tabledat), "95% CI")]
 
-for(i in 1:length(pct_cols)){
-  tabledat[[pct_cols[i]]] <- round(tabledat[[pct_cols[i]]], NUM_DECIMAL_DIGITS)
+if (length(pct_cols) > 0){
+  
+  for(i in 1:length(pct_cols)){
+    tabledat[[pct_cols[i]]] <- round(tabledat[[pct_cols[i]]], NUM_DECIMAL_DIGITS)
+  }
 }
 
-flextable::flextable(tabledat) %>% 
+wtd_n_cols <- names(tabledat)[stringr::str_detect(names(tabledat), "Weighted N")]
+
+if (length(wtd_n_cols) > 0){
+  
+  for(i in 1:length(wtd_n_cols)){
+    tabledat[[wtd_n_cols[i]]] <- round(tabledat[[wtd_n_cols[i]]])
+  }
+}
+
+header_names <- names(tabledat)
+header_names[stringr::str_detect(header_names, "95% CI")] <- "95% CI"
+
+tbl <- flextable::flextable(tabledat) %>% 
+  delete_part(., part = "header") %>% 
+  add_header_row(values = header_names, top = FALSE) %>%
+  hline(part = "header") %>% 
+  hline_top(part = "header") %>% 
   merge_h_range(., i = span_rows, j1 = 1, j2 = ncol(tabledat)) %>% 
-  align(., i = span_rows, align = "center") %>% 
+  bold(., i = span_rows) %>% 
+  align(., i = span_rows, align = "left") %>% 
+  align(., i = nonspan_rows, j = 2:ncol(tabledat), align = "center") %>% 
+  align(., align = "center", j = 2:ncol(tabledat), part = "header") %>% 
   set_table_properties(., layout = "autofit") %>% 
-  fontsize(., size = 9, part = "all")
+  fontsize(., size = 9, part = "all") 
+
+tbl
 
 ```
+
+```{r, echo = FALSE, results = 'asis'}
+
+if (!is.null(rep_notes)){
+  cat(rep_notes)
+}
+
+```
+
 
 \newpage 

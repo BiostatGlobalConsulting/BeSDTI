@@ -7,7 +7,7 @@ output: word_document
 
 ```{r, echo = FALSE}
 
-if (input_i$indicator == "besd_ch_core"){
+if (input_i$indicator %in% c("besd_ch_core", "besd_covid_core")){
   plot_stratifier_ref <- input_i$stratifier
   
   if (!is.na(plot_stratifier_ref)){
