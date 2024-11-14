@@ -162,7 +162,7 @@ check_besd_analysis_metadata <- function(VCP = "check_besd_analysis_metadata"){
       # for instance, how it is used in the indicator named SIA_COVG_04.
 
       # Define datasets to look for
-      besd_datasets <- c("CH_DATASET", "COVID_DATASET", "CM_DATASET")
+      besd_datasets <- c("CH_DATASET", "COV_DATASET", "CM_DATASET")
 
       # Restrict to datasets that are defined and exist in the data folder
 

@@ -63,7 +63,7 @@ besd_multi_lingual_strings <- function(VCP = "besd_multi_lingual_strings"){
   } else {
 
     language <- get("OUTPUT_LANGUAGE", envir = .GlobalEnv)
-    language <- str_to_upper(language)
+    language <- stringr::str_squish(stringr::str_to_upper(language))
 
     if (language == "EN"){
       language <- "ENGLISH"
@@ -77,7 +77,11 @@ besd_multi_lingual_strings <- function(VCP = "besd_multi_lingual_strings"){
   }
 
   if (lang_default == FALSE) {
-    language_options <- stringr::str_to_upper(names(language_file)[2:ncol(language_file)])
+    language_options <- stringr::str_squish(
+      stringr::str_to_upper(
+        names(language_file)[2:ncol(language_file)]
+      )
+    )
   } else {
     language_options <- c("ENGLISH", "SPANISH", "FRENCH", "PORTUGUESE")
   }
@@ -90,11 +94,11 @@ besd_multi_lingual_strings <- function(VCP = "besd_multi_lingual_strings"){
       errormsgs <- c(
         errormsgs,
         paste0("Global OUTPUT_LANGUAGE is set to an invalid value (", OUTPUT_LANGUAGE,
-               "). Valid values (when using the default BeSD-TI multilingual strings file) are English, EN, Spanish, SP, French, FR, Portuguese, or PT."))
+               "). Valid values (when using the default BeSD-TI multilingual strings file) are English, EN, Spanish, ES, French, FR, Portuguese, or PT."))
       besd_log_comment(
         VCP, 1, "Error",
         paste0("Global OUTPUT_LANGUAGE is set to an invalid value (", OUTPUT_LANGUAGE,
-               "). Valid values (when using the default BeSD-TI multilingual strings file) are English, EN, Spanish, SP, French, FR, Portuguese, or PT."))
+               "). Valid values (when using the default BeSD-TI multilingual strings file) are English, EN, Spanish, ES, French, FR, Portuguese, or PT."))
       exitflag <- 1
     } else {
       errormsgs <- c(

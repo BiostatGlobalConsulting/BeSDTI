@@ -13,10 +13,6 @@
 #' check_besd_metadata()
 
 # check_besd_metadata R version 1.00 - Biostat Global Consulting - 2024-07-23
-# IN PROGRESS AS OF 7/19/2024
-# - child vx: confirm the required variables, and any that aren't allowed to have missing values
-# - checking interview dates? see ~line 156
-# - add section for covid besd survey
 
 # *******************************************************************************
 # Change log
@@ -24,6 +20,7 @@
 # Date 			  Version 	Name			      What Changed
 # 2024-07-23  1.00      Caitlin Clary   Original R version adapted from v1.11 of
 #                                       check_RI_analysis_metadata in vcqiR
+# 2024-11-12  1.01      Caitlin Clary   Add COVID-19 analysis checks
 # *******************************************************************************
 
 check_besd_metadata <- function(VCP = "check_besd_metadata",
@@ -86,6 +83,7 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
     }
   }
 
+  # Child vaccination analysis checks ----
   if (analysis == "child"){
     # Add logic: checks for child vaccination BeSD analysis
 
@@ -133,10 +131,10 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
           # Check existence and type of required variables
 
           numeric_varlist <- c(
-            "Clusternum", "Housenum",
+            "Clusternum",
             "CHI_intent", "CHI_confb", "CHI_normf", "CHI_where", "CHI_afford")
 
-          string_varlist <- c("Districtname", "PUID")
+          string_varlist <- c("Districtname", "PUID", "Housenum")
 
           no_missing_varlist <- c("Districtname", "Clusternum", "Housenum", "PUID")
 
@@ -145,7 +143,9 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
           for(v in seq_along(varlist)){
             if (varlist[v] %in% names(dat)){
 
-              # If the variable exists, confirm the variable is not missing and has the correct variable type
+              # If the variable exists, confirm the variable is not missing and
+              # has the correct variable type
+
               var_v <- get(varlist[v], dat)
 
               if (varlist[v] %in% numeric_varlist){
@@ -164,23 +164,26 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
               if (varlist[v] %in% no_missing_varlist){
                 if (any(var_v == "" | is.na(var_v))){
                   errormsgs <- c(errormsgs,
-                                 paste0("The variable ", varlist[v], " in the child dataset cannot have missing values."))
+                                 paste0("The variable ", varlist[v],
+                                        " in the child dataset cannot have missing values."))
                   exitflag <- 1
                   besd_log_comment(
                     VCP, 1, "Error",
-                    paste0("The variable ", varlist[v], " in the child dataset cannot have a missing value."))
+                    paste0("The variable ", varlist[v],
+                           " in the child dataset cannot have a missing value."))
                 }
               }
 
             } else {
               errormsgs <- c(
                 errormsgs,
-                paste0("Variable ", varlist[v],
+                paste0("The variable ", varlist[v],
                        " does not exist in the child dataset and is required to run BeSD-TI"))
               exitflag <- 1
               besd_log_comment(
                 VCP, 1, "Error",
-                paste0(varlist[v], " does not exist in the child dataset and is required to run BeSD-TI"))
+                paste0("The variable ", varlist[v],
+                       " does not exist in the child dataset and is required to run BeSD-TI"))
             }
           } # end varlist loop
 
@@ -254,9 +257,180 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
     } # end else{} when CH_DATASET is set
   } # end if analysis = child
 
-  if (analysis == "covid"){
-    # Add logic: checks for Covid-19 BeSD analysis
+  # COVID-19 analysis checks ----
 
+  if (analysis == "covid"){
+
+    if (!besd_object_exists("COV_DATASET")){
+      errormsgs <- c(errormsgs,
+                     "Please set COV_DATASET")
+      exitflag <- 1
+      besd_log_comment(VCP, 1, "Error", "Please set COV_DATASET")
+    } else {
+
+      # Check that COVID-19 survey dataset exists
+      cv_data_file <- paste0(DATA_FOLDER, "/", COV_DATASET)
+      if (file.exists(cv_data_file)){
+        file.copy(from = cv_data_file, to = OUTPUT_FOLDER, overwrite = TRUE)
+      }
+
+      if (!file.exists(cv_data_file)){
+        errormsgs <- c(
+          errormsgs,
+          paste0("The file defined by global macros DATA_FOLDER/COV_DATASET (",
+                 cv_data_file, ") does not exist"))
+
+        exitflag <- 1
+        besd_log_comment(VCP, 1, "Error",
+                         paste0("COVID-19 dataset specified ( ",
+                                cv_data_file, ") does not exist"))
+      } else {
+
+        # Read the child dataset
+        dat <- besd_read(cv_data_file)
+
+        if (is.data.frame(dat) == FALSE){
+          errormsgs <- c(
+            errormsgs,
+            paste0("The file defined by global macros DATA_FOLDER/COV_DATASET (",
+                   cv_data_file, ") is not in a valid format"))
+
+          exitflag <- 1
+          besd_log_comment(
+            VCP, 1, "Error",
+            paste0("COVID-19 dataset (", cv_data_file, ") is not in a valid format"))
+
+        } else {
+
+          # Check existence and type of required variables
+
+          numeric_varlist <- c(
+            "Clusternum",
+            "COV_intent", "COV_confb", "COV_normf", "COV_where", "COV_afford")
+
+          string_varlist <- c("Districtname", "PUID", "Housenum")
+
+          no_missing_varlist <- c("Districtname", "Clusternum", "Housenum", "PUID")
+
+          varlist <- unique(c(numeric_varlist, string_varlist))
+
+          for(v in seq_along(varlist)){
+            if (varlist[v] %in% names(dat)){
+
+              # If the variable exists, confirm the variable is not missing and
+              # has the correct variable type
+
+              var_v <- get(varlist[v], dat)
+
+              if (varlist[v] %in% numeric_varlist){
+
+                if (all(!class(var_v) %in% c("numeric", "double", "integer"))){
+                  errormsgs <- c(
+                    errormsgs,
+                    paste0(numeric_varlist[v], " needs to be a numeric variable in the COVID-19 dataset."))
+                  exitflag <- 1
+                  besd_log_comment(
+                    VCP, 1, "Error",
+                    paste0(numeric_varlist[v], " needs to be a numeric variable in the COVID-19 dataset."))
+                }
+              }
+
+              if (varlist[v] %in% no_missing_varlist){
+                if (any(var_v == "" | is.na(var_v))){
+                  errormsgs <- c(errormsgs,
+                                 paste0("The variable ", varlist[v],
+                                        " in the COVID-19 dataset cannot have missing values."))
+                  exitflag <- 1
+                  besd_log_comment(
+                    VCP, 1, "Error",
+                    paste0("The variable ", varlist[v],
+                           " in the COVID-19 dataset cannot have a missing value."))
+                }
+              }
+
+            } else {
+              errormsgs <- c(
+                errormsgs,
+                paste0("Variable ", varlist[v],
+                       " does not exist in the COVID-19 dataset and is required to run BeSD-TI"))
+              exitflag <- 1
+              besd_log_comment(
+                VCP, 1, "Error",
+                paste0("The variable ", varlist[v],
+                       " does not exist in the COVID-19 dataset and is required to run BeSD-TI"))
+            }
+          } # end varlist loop
+
+          # Check values of the core indicator variables
+
+          # COV_intent: 0 = no, 1 = yes, 2 = not sure, 3 = already vx
+          if (any(!dat$COV_intent %in% c(0, 1, 2, 3, NA))){
+            errormsgs <- c(
+              errormsgs,
+              "The COV_intent variable has invalid values. Valid values are 0, 1, 2, 3, and missing (NA)."
+            )
+
+            exitflag <- 1
+            besd_log_comment(
+              VCP, 1, "Error",
+              "The COV_intent variable has invalid values. Valid values are 0, 1, 2, 3, and missing (NA)."
+            )
+          } # end COV_intent check
+
+          if (any(!dat$COV_confb %in% c(1, 2, 3, 4, NA))){
+            errormsgs <- c(
+              errormsgs,
+              "The COV_confb variable has invalid values. Valid values are 1, 2, 3, 4, and missing (NA)."
+            )
+
+            exitflag <- 1
+            besd_log_comment(
+              VCP, 1, "Error",
+              "The COV_confb variable has invalid values. Valid values are 1, 2, 3, 4, and missing (NA)."
+            )
+          } # end COV_confb check
+
+          if (any(!dat$COV_normf %in% c(0, 1, NA))){
+            errormsgs <- c(
+              errormsgs,
+              "The COV_normf variable has invalid values. Valid values are 0, 1, and missing (NA)."
+            )
+
+            exitflag <- 1
+            besd_log_comment(
+              VCP, 1, "Error",
+              "The COV_normf variable has invalid values. Valid values are 0, 1, and missing (NA)."
+            )
+          } # end COV_normf check
+
+          if (any(!dat$COV_where %in% c(0, 1, NA))){
+            errormsgs <- c(
+              errormsgs,
+              "The COV_where variable has invalid values. Valid values are 0, 1, and missing (NA)."
+            )
+
+            exitflag <- 1
+            besd_log_comment(
+              VCP, 1, "Error",
+              "The COV_where variable has invalid values. Valid values are 0, 1, and missing (NA)."
+            )
+          } # end COV_where check
+
+          if (any(!dat$COV_afford %in% c(1, 2, 3, 4, NA))){
+            errormsgs <- c(
+              errormsgs,
+              "The COV_afford variable has invalid values. Valid values are 1, 2, 3, 4, and missing (NA)."
+            )
+
+            exitflag <- 1
+            besd_log_comment(
+              VCP, 1, "Error",
+              "The COV_afford variable has invalid values. Valid values are 1, 2, 3, 4, and missing (NA)."
+            )
+          } # end COV_afford check
+        } # end else if COV_DATASET was read in
+      } # end else if COV_DATASET (file read/variable checks)
+    } # end else if COV_DATASET exists (file copy)
   }
 
   if (exitflag == 1){

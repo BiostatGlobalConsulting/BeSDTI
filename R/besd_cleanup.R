@@ -21,10 +21,9 @@ besd_cleanup <- function(){
   # gracefully
   besd_global(CHECK_INSTEAD_OF_RUN, 0)
 
-  # Close the datasets that hold the results of hypothesis tests and put them into
-  # the output spreadsheet
-  # Close the log file and put it into the output spreadsheet
-  # Clean up extra files
-  # Send a message to the screen if there are warnings or errors in the log
+  # Close the datasets that hold the results of hypothesis tests and put them
+  # into the output spreadsheet; close the log file and put it into the output
+  # spreadsheet; clean up extra files; send a message to the screen if there are
+  # warnings or errors in the log
   besd_halt_immediately()
 }

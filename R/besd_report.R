@@ -8,6 +8,8 @@
 #' @import knitr
 #' @import rmarkdown
 #' @import stringr
+#' @import flextable
+#' @import officedown
 #'
 #' @export
 #' @return Template BeSD survey report
@@ -21,7 +23,7 @@ besd_report <- function(
 ){
 
   besd_log_comment(VCP, 5, "Flow", "Starting")
-
+# browser()
   inputs_working <- BESDTI_REPORT_INPUTS %>%
     mutate(
       rt_input_path = stringr::str_remove(database_path, "_database.rds"),
@@ -47,12 +49,40 @@ besd_report <- function(
     besd_report_setup(template_name = "besd_report_subsection_table.Rmd",
                       outfile_name = "besd_report_subsection_table.Rmd")
 
-    besd_report_setup(
-      template_name = "besd_child_vx_report_template.Rmd",
-      outfile_name = report_filename)
+    # besd_report_setup(template_name = "besd_report_subsection_table_portrait.Rmd",
+    #                   outfile_name = "besd_report_subsection_table_portrait.Rmd")
+    #
+    # besd_report_setup(template_name = "besd_report_subsection_table_landscape.Rmd",
+    #                   outfile_name = "besd_report_subsection_table_landscape.Rmd")
+
+    besd_report_setup(template_name = "besd_child_vx_report_template.Rmd",
+                      outfile_name = report_filename)
 
   }
 
+  if (analysis == "covid"){
+
+    report_filename <- paste0(
+      "BeSD_Template_Report_COVID_19_Vaccination_", ANALYSIS_COUNTER, "_",
+      stringr::str_replace_all(Sys.Date(), "-", "_"), ".Rmd")
+
+    # Copy template .Rmd files
+    besd_report_setup(template_name = "besd_report_subsection_plot.Rmd",
+                      outfile_name = "besd_report_subsection_plot.Rmd")
+
+    besd_report_setup(template_name = "besd_report_subsection_table.Rmd",
+                      outfile_name = "besd_report_subsection_table.Rmd")
+
+    # besd_report_setup(template_name = "besd_report_subsection_table_portrait.Rmd",
+    #                   outfile_name = "besd_report_subsection_table_portrait.Rmd")
+    #
+    # besd_report_setup(template_name = "besd_report_subsection_table_landscape.Rmd",
+    #                   outfile_name = "besd_report_subsection_table_landscape.Rmd")
+
+    besd_report_setup(template_name = "besd_covid_vx_report_template.Rmd",
+                      outfile_name = report_filename)
+
+  }
   setwd(OUTPUT_FOLDER)
   rmarkdown::render(
     paste0("Report_Template/", report_filename))

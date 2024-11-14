@@ -1,19 +1,21 @@
-# BeSD-TI Control Program - Childhood Vaccination - Version 1.00 - 2024-10-16
+# BeSD-TI Control Program - COVID-19 Vaccination - Version 1.00 - 2024-11-13
 # Biostat Global Consulting
 
 # Behavioral and Social Drivers of Vaccination: Tools for Inference (BeSD-TI)
-# control program to analyze data from a childhood vaccination BeSD survey
+# control program to analyze data from a COVID-19 vaccination BeSD survey
 
 # Change log
 
 # Date        Version Number    Name              What Changed
-# 2024-10-16  1.00              Caitlin Clary     Original version
+# 2024-11-13  1.00              Caitlin Clary     Original version
 
 # *************************************************
 # Code Block A                 (Do not change) ----
 
 # Load the BeSD-TI package
-library(BeSDTI, attach.required = TRUE)
+# library(BeSDTI, attach.required = TRUE)
+setwd("C:/Users/clary/Biostat Global Dropbox/Caitlin Clary/CBC GitHub Repos/BeSDTI")
+devtools::load_all()
 
 # Start with clear memory
 cleanup_BeSDTI_globals()
@@ -21,11 +23,11 @@ cleanup_BeSDTI_globals()
 # *************************************************
 # Code Block B               (User may change) ----
 
-DATA_FOLDER <- "Q:/WHO - BeSD support/CBC Working Folder/BeSD Test Data"
+DATA_FOLDER <- "Q:/WHO - BeSD support/CBC Working Folder"
 
-OUTPUT_FOLDER <- "Q:/WHO - BeSD support/CBC Working Folder/BeSD Child Vx Test Output"
+OUTPUT_FOLDER <- "Q:/WHO - BeSD support/CBC Working Folder/BeSD COVID Test Output"
 
-ANALYSIS_NAME <- "Child_Vx_Test"
+ANALYSIS_NAME <- "COVID_Vx_Test"
 
 # *************************************************
 # Code Block C                 (Do not change) ----
@@ -36,7 +38,7 @@ setwd(DATA_FOLDER)
 unlink(paste0(OUTPUT_FOLDER, "/", ANALYSIS_NAME, "_TO.xlsx"), force = TRUE)
 
 # Give the current program a name, for logging purposes
-VCP <- "BeSD-TI_ChildVx_Control_Program"
+VCP <- "BeSD-TI_COVID_Control_Program"
 
 # Open the log and put a comment in it
 besd_log_comment(VCP, 3, "Comment", "Run begins...log opened...")
@@ -57,11 +59,11 @@ besd_log_comment(VCP, 3, "Package",
 # DATA_FOLDER. File names should include file extensions; accepted file types:
 # .rds, .dta, .csv
 
-# Name of dataset that holds childhood vaccination BeSD data
-besd_global(CH_DATASET, "BeSD_Child_Data_Faux_2024-09-19.rds")
+# Name of dataset that holds COVID-19 vaccination BeSD data
+besd_global(COV_DATASET, "BeSD_Covid_Data_Faux_2024-11-14.rds")
 
 # Name of dataset that holds cluster metadata (optional)
-besd_global(CM_DATASET, "BeSD_CM_Data_Faux_2024-09-19.rds")
+besd_global(CM_DATASET, "BeSD_CM_COVID_Data_Faux_2024-11-14.rds")
 
 # Output layout parameters
 
@@ -228,19 +230,19 @@ besd_global(CHECK_INSTEAD_OF_RUN, 0)
 # Establish an empty object before starting to record temp dataset list
 TEMP_DATASETS <- NULL
 
-check_besd_metadata(analysis = "child")
+check_besd_metadata(analysis = "covid")
 
 # ............................................................
 # Establish unique IDs
 # ............................................................
 
-# The name of the dataset coming out of the ID step is CH_with_ids
-establish_unique_CH_ids()
+# The name of the dataset coming out of the ID step is COV_with_ids
+establish_unique_COV_ids()
 
 # ............................................................
-# Generate derived variables for child BeSD analysis
+# Generate derived variables for COVID-19 BeSD analysis
 # ............................................................
-gen_ch_dv()
+gen_cov_dv()
 
 # *************************************************
 # Code Block F               (User may change) ----
@@ -265,7 +267,7 @@ if (MAKE_TEMPLATE_REPORT == 1){
 }
 
 # --------------------------------------------------------------------------
-# Summarize BeSD core indicators for childhood vaccination
+# Summarize BeSD core indicators for COVID-19 vaccination
 # --------------------------------------------------------------------------
 
 besd_global(BESD_CORE_WEIGHTED, "NO")
@@ -279,7 +281,7 @@ besd_global(BESD_CORE_TABLE_STRUCTURE, 1)
 
 # Should bar plots show separate bars for respondents in different categories,
 # e.g. male vs. female? If so, define the variable for stratification here.
-besd_global(BESD_CORE_PLOT_STRATIFIER, "CHI_chigender")
+besd_global(BESD_CORE_PLOT_STRATIFIER, "Area")
 
 # What color(s) should bars in the bar plot be? Leave this global undefined (NA
 # or NULL) to use default colors, provide one bar color if
@@ -294,21 +296,20 @@ besd_global(BESD_CORE_PLOT_COLORS, NA)
 # core indicator is measuring? Set to 1 to show headers (recommended)
 besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 1)
 
-
-besd_ch_core(cleanup = TRUE)
+besd_covid_core(cleanup = TRUE)
 
 # --------------------------------------------------------------------------
 # Summarize responses to some multiple-choice questions using DESC_02 & DESC_03
 # --------------------------------------------------------------------------
 
 # Standard BeSD question:
-# Has your child had none, some, or all of the vaccines in the schedule?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_vaccs")
+# How concerned are you about getting COVID-19?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_risks")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B11"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B53"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -317,17 +318,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# How safe do you think vaccines are for your child?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_confs")
+# Have you received a COVID-19 vaccine?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_vaccs")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B12"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B54"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -336,17 +337,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# How much do you trust the health workers who give children vaccines?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_confh")
+# How safe do you think a COVID-19 vaccine is for you?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_confs")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B13"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B57"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -355,17 +356,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# Do you think most parents you know get their children vaccinated?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_normp")
+# Do you think that getting a COVID-19 vaccine will allow you to see your family and friends again?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_seefr")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B14"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B58"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -374,17 +375,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# Do you think your religious leaders want you to get your child vaccinated?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_normr")
+# How much do you trust the health workers who would give you a COVID-19 vaccine?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_confh")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B15"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B59"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -393,17 +394,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# Do you think your community leaders want you to get your child vaccinated?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_normc")
+# Do you think most adults you know will get a COVID-19 vaccine if it is recommended to them?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_normp")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B16"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B60"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -412,17 +413,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# Has a health worker recommended your child be vaccinated?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_rechcw")
+# Do you think most of the people you work with will get a COVID-19 vaccine?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_normw")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B17"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B61"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -431,17 +432,18 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
+
 
 # ..............................................................................
 # Standard BeSD question:
-# Have you ever been contacted about your child being due for vaccination?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_recall")
+# Do you think your religious leaders want you to get a COVID-19 vaccine?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_normr")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B18"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B63"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -450,18 +452,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# If it was time for your child to get vaccinated, would the mother need
-# permission to take your child to the clinic?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_travel")
+# Do you think other community leaders want you to get a COVID-19 vaccine?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_normc")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B19"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B64"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -470,17 +471,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# Have you personally ever taken your youngest child to get vaccinated?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_tookc")
+# Has a health worker recommended you get a COVID-19 vaccine?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_rechcw")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B20"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B65"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -489,17 +490,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# Have you ever been turned away when you tried to get your child vaccinated?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_avail")
+# Have you ever been contacted about being due for a COVID-19 vaccine?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_recall")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B21"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B66"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -508,17 +509,17 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# How easy is it to get vaccination services for your child?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_access")
+# If it was time for you to get a COVID-19 vaccine, would you need permission to go and get it?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_travel")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B22"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B67"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -527,29 +528,87 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
-# What makes it hard to get vaccination services for your child?
+# Do you know where to go to get a COVID-19 vaccine for yourself?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_where")
+besd_global(DESC_02_WEIGHTED, "NO")
+besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_03_DATASET, "CH_with_ids.rds")
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B68"))
+
+besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
+
+# Remember that DESC_02 automatically assigns three footnotes, so if you
+# want to include another, start with the number 4.
+# We are not using it here, but clear it out in case it was used earlier.
+besd_global(DESC_02_TO_FOOTNOTE_4, NA)
+BESD_DESC_02(cleanup = TRUE,
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
+
+# ..............................................................................
+# Standard BeSD question:
+# Is a COVID-19 vaccine available for you to get at your place of work?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_onsite")
+besd_global(DESC_02_WEIGHTED, "NO")
+besd_global(DESC_02_DENOMINATOR, "RESPONDED")
+
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B69"))
+
+besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
+
+# Remember that DESC_02 automatically assigns three footnotes, so if you
+# want to include another, start with the number 4.
+# We are not using it here, but clear it out in case it was used earlier.
+besd_global(DESC_02_TO_FOOTNOTE_4, NA)
+BESD_DESC_02(cleanup = TRUE,
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
+
+# ..............................................................................
+# Standard BeSD question:
+# How easy is it to get a COVID-19 vaccine for yourself?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_access")
+besd_global(DESC_02_WEIGHTED, "NO")
+besd_global(DESC_02_DENOMINATOR, "RESPONDED")
+
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B70"))
+
+besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
+
+# Remember that DESC_02 automatically assigns three footnotes, so if you
+# want to include another, start with the number 4.
+# We are not using it here, but clear it out in case it was used earlier.
+besd_global(DESC_02_TO_FOOTNOTE_4, NA)
+BESD_DESC_02(cleanup = TRUE,
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
+
+# ..............................................................................
+# Standard BeSD question:
+# What makes it hard for you to get a COVID-19 vaccine?
+
+besd_global(DESC_03_DATASET, "COV_with_ids.rds")
 besd_global(DESC_03_SHORT_TITLE, "Vx_Services_Access")
 besd_global(DESC_03_VARIABLES,
-            c("CHI_lowacnoth", "CHI_lowachard", "CHI_lowacopen",
-              "CHI_lowacaway", "CHI_lowactime", "CHI_lowacelse"))
+            c("COV_lowacnoth", "COV_lowacavail", "COV_lowachard",
+              "COV_lowacsite", "COV_lowacopen", "COV_lowacwait",
+              "COV_lowacwork", "COV_lowacaway", "COV_lowacelse"))
 
 besd_global(DESC_03_WEIGHTED, "YES")
 besd_global(DESC_03_DENOMINATOR, "ALL")
 besd_global(DESC_03_SELECTED_VALUE, 1)
 
 besd_global(DESC_03_TO_TITLE,
-            language_string(language_use = language_use, str = "OS_B23"))
+            language_string(language_use = language_use, str = "OS_B72"))
 besd_global(DESC_03_TO_SUBTITLE, NA)
 
-# Relabel CHI_lowacelse to simply say "Other"
+# Relabel COV_lowacelse to simply say "Other"
 besd_global(DESC_03_N_RELABEL_LEVELS, 1)
-besd_global(DESC_03_RELABEL_LEVEL_1, "CHI_lowacelse")
+besd_global(DESC_03_RELABEL_LEVEL_1, "COV_lowacelse")
 besd_global(DESC_03_RELABEL_LABEL_1,
             language_string(language_use = language_use, str = "OS_304"))
 
@@ -557,14 +616,14 @@ BESD_DESC_03(cleanup = TRUE, database_id = "lowac")
 
 # ..............................................................................
 # Standard BeSD question:
-# How satisfied are you with the vaccination services?
-besd_global(DESC_02_DATASET, "CH_with_ids.rds")
-besd_global(DESC_02_VARIABLES, "CHI_satis")
+# How satisfied are you with COVID-19 vaccination services?
+besd_global(DESC_02_DATASET, "COV_with_ids.rds")
+besd_global(DESC_02_VARIABLES, "COV_satis")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
 besd_global(DESC_02_TO_TITLE,
-            language_string(language_use = language_use, str = "OS_B24"))
+            language_string(language_use = language_use, str = "OS_B73"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -573,30 +632,30 @@ besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 # We are not using it here, but clear it out in case it was used earlier.
 besd_global(DESC_02_TO_FOOTNOTE_4, NA)
 BESD_DESC_02(cleanup = TRUE,
-             database_id = stringr::str_remove(DESC_02_VARIABLES, "CHI_"))
+             database_id = stringr::str_remove(DESC_02_VARIABLES, "COV_"))
 
 # ..............................................................................
 # Standard BeSD question:
 # What is not satisfactory about the vaccination services?
 
-besd_global(DESC_03_DATASET, "CH_with_ids.rds")
+besd_global(DESC_03_DATASET, "COV_with_ids.rds")
 besd_global(DESC_03_SHORT_TITLE, "Vx_Unsatisfactory")
 besd_global(DESC_03_VARIABLES,
-            c("CHI_qualinoth", "CHI_qualiavail", "CHI_qualiopen",
-              "CHI_qualiwait", "CHI_qualiclean", "CHI_qualipoor",
-              "CHI_qualirespect", "CHI_qualitime", "CHI_qualielse"))
+            c("COV_qualinoth", "COV_qualiavail", "COV_qualiopen",
+              "COV_qualiwait", "COV_qualiclean", "COV_qualipoor",
+              "COV_qualirespect", "COV_qualitime", "COV_qualielse"))
 
 besd_global(DESC_03_WEIGHTED, "YES")
 besd_global(DESC_03_DENOMINATOR, "ALL")
 besd_global(DESC_03_SELECTED_VALUE, 1)
 
 besd_global(DESC_03_TO_TITLE,
-            language_string(language_use = language_use, str = "OS_B25"))
+            language_string(language_use = language_use, str = "OS_B74"))
 besd_global(DESC_03_TO_SUBTITLE, NA)
 
-# Relabel CHI_qualielse to simply say "Other"
+# Relabel COV_qualielse to simply say "Other"
 besd_global(DESC_03_N_RELABEL_LEVELS, 1)
-besd_global(DESC_03_RELABEL_LEVEL_1, "CHI_qualielse")
+besd_global(DESC_03_RELABEL_LEVEL_1, "COV_qualielse")
 besd_global(DESC_03_RELABEL_LABEL_1,
             language_string(language_use = language_use, str = "OS_304"))
 
@@ -606,7 +665,7 @@ BESD_DESC_03(cleanup = TRUE, database_id = "quali")
 # Compile report
 
 if (MAKE_TEMPLATE_REPORT == 1){
-  besd_report(analysis = "child")
+  besd_report(analysis = "covid")
 }
 
 # *************************************************

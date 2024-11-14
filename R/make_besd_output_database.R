@@ -133,7 +133,7 @@ make_besd_output_database <- function(
         condition <- level4_layout$condition[j]
 
         tempvar <- get(variable, dat)
-        varlabel <- attr(tempvar,"label")
+        varlabel <- attr(tempvar, "label", exact = TRUE)
         # Count respondents meeting the level4 condition(s)
         count <- subset(dat, eval(rlang::parse_expr(condition)) &
                           tempvar %in% c(0,1)) %>% nrow()

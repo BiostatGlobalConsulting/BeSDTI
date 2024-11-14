@@ -7,7 +7,7 @@
 besd_basic_fmtids()
 }
 \value{
-Values that stores Excel styles in the global environment
+Values that store Excel styles in the global environment
 }
 \description{
 Assign default formats for Excel

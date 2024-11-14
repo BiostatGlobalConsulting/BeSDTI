@@ -24,6 +24,9 @@
 # 2024-08-08  1.00      Caitlin Clary   Original R version adapted from v1.01 of
 #                                       make_DESC_0203_output_database in vcqiR
 # 2024-10-09  1.01      Caitlin Clary   Adding BESDTI_REPORT_INPUTS logic
+# 2024-10-23  1.02      Caitlin Clary   Update varlabel logic for DESC_03 - use
+#                                       variable name if no label; pass through
+#                                       subtitles and notes for report
 # *******************************************************************************
 
 # NOTE: functional, with some details pending (see TO DO notes)
@@ -167,7 +170,7 @@ make_DESC_0203_output_database <- function(
         valuematch <- DESC_03_VARIABLES[i]
       }
       if (mid == "02"){
-        valuematch <- get(paste0("DESC02_VALUE_LEVEL_",i), envir = .GlobalEnv)
+        valuematch <- get(paste0("DESC02_VALUE_LEVEL_", i), envir = .GlobalEnv)
       }
 
       # If a subtotal is supposed to be listed *before* this individual response...add it here
@@ -177,8 +180,8 @@ make_DESC_0203_output_database <- function(
           for (k in 1:sub_count){
             if (besd_object_exists(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k))){
               sub_list <- get(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k), envir = .GlobalEnv)
-              worldmatch = (word(sub_list,2) %in% as.character(valuematch)) | (is.na(valuematch) & word(sub_list,2) == "NA")
-              if (((str_to_upper(word(sub_list,1)) == "BEFORE") %in% TRUE & worldmatch) %in% TRUE){
+              wordmatch = (word(sub_list,2) %in% as.character(valuematch)) | (is.na(valuematch) & word(sub_list,2) == "NA")
+              if (((str_to_upper(word(sub_list,1)) == "BEFORE") %in% TRUE & wordmatch) %in% TRUE){
                 vorder <- c(vorder,level_count_without_subtotals + k)
                 vlist <- c(vlist, paste0("desc",mid,"_",tempvid,"_st",k))
               }
@@ -198,8 +201,8 @@ make_DESC_0203_output_database <- function(
           for (k in 1:sub_count){
             if (besd_object_exists(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k))){
               sub_list <- get(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k), envir = .GlobalEnv)
-              worldmatch = (word(sub_list,2) %in% as.character(valuematch)) | (is.na(valuematch) & word(sub_list,2) == "NA")
-              if ((str_to_upper(word(sub_list,1)) %in% "AFTER" & worldmatch) %in% TRUE){
+              wordmatch = (word(sub_list,2) %in% as.character(valuematch)) | (is.na(valuematch) & word(sub_list,2) == "NA")
+              if ((str_to_upper(word(sub_list,1)) %in% "AFTER" & wordmatch) %in% TRUE){
                 vorder <- c(vorder,level_count_without_subtotals + k)
                 vlist <- c(vlist, paste0("desc",mid,"_",tempvid,"_st",k))
               }
@@ -218,9 +221,9 @@ make_DESC_0203_output_database <- function(
     sub_count <- get(paste0("DESC_",mid,"_ST_COUNT_",tempvid), envir = .GlobalEnv)
     if (sub_count != 0){
       for (k in 1:sub_count){
-        if (!besd_object_exists(paste0("DESC_",mid,"_SUBTOTAL_LIST_",k))){
-          vorder <- c(vorder,level_count_without_subtotals + k)
-          vlist <- c(vlist, paste0("desc",mid,"_",tempvid,"_st",k))
+        if (!besd_object_exists(paste0("DESC_",mid,"_SUBTOTAL_LIST_", k))){
+          vorder <- c(vorder, level_count_without_subtotals + k)
+          vlist <- c(vlist, paste0("desc", mid, "_", tempvid, "_st", k))
         }
       } #end of sub_count k loop
 
@@ -233,18 +236,23 @@ make_DESC_0203_output_database <- function(
 
   # Record and save the labels for pct_*
   for (k in seq_along(vlist)){
-    varlabel <- attr(get(vlist[k], dat),"label")
+    varlabel <- attr(get(vlist[k], dat), "label", exact = TRUE)
     if (is.null(varlabel)){
-      varlabel <- ""
+      if (mid == "03"){
+        varlabel <- DESC_03_VARIABLES[k]
+      } else {
+        varlabel <- ""
+      }
     }
     label_temp <- data.frame(var = paste0("pct",vorder[k]), label = varlabel)
     DESC_labels <- rbind(DESC_labels,label_temp)
   }
 
-  assign(paste0("DESC_",mid,"_labels_",tempvid),DESC_labels, envir = .GlobalEnv)
+  assign(paste0("DESC_", mid, "_labels_", tempvid), DESC_labels, envir = .GlobalEnv)
 
 
   l <- 4
+
   for (j in 1:nrow(output_layout)){
     # Pass along the name and id of the sub-stratum
     l4name <- output_layout$label[j]
@@ -269,7 +277,7 @@ make_DESC_0203_output_database <- function(
 
         for (k in seq_along(vlist)){
           tempvar <- get(vlist[k], dat)
-          varlabel <- attr(tempvar,"label")
+          varlabel <- attr(tempvar, "label", exact = TRUE)
           # Count respondents meeting the condition(s)
           count <- subset(dat, eval(rlang::parse_expr(condition)) &
                             tempvar %in% c(0,1)) %>% nrow()
@@ -383,8 +391,8 @@ make_DESC_0203_output_database <- function(
         gotemp <- gotemp %>% mutate(n = NA)
         go <- rbind(go, gotemp)
       }
-    } #end of unweighted case
-  } #end of j loop
+    } # end of unweighted case
+  } # end of j loop
 
   if (is.na(database_id)){
     if (counter < 10){
@@ -488,7 +496,22 @@ make_DESC_0203_output_database <- function(
 
   if (MAKE_TEMPLATE_REPORT == 1){
     # TO DO add condition for excluding from report?
-    # TO DO add variables for subtitle, notes, ...?
+
+    if (tempmeasure == "DESC_02"){
+      if (besd_object_exists("DESC_02_TO_SUBTITLE")){
+        tempsubtitle <- DESC_02_TO_SUBTITLE
+      } else {
+        tempsubtitle <- NA
+      }
+    }
+
+    if (tempmeasure == "DESC_03"){
+      if (besd_object_exists("DESC_03_TO_SUBTITLE")){
+        tempsubtitle <- DESC_03_TO_SUBTITLE
+      } else {
+        tempsubtitle <- NA
+      }
+    }
 
     temp_report_row <- data.frame(
       indicator = tempmeasure,
@@ -496,6 +519,8 @@ make_DESC_0203_output_database <- function(
       label = label,
       title = ifelse(
         tempmeasure == "DESC_02", DESC_02_TO_TITLE, DESC_03_TO_TITLE),
+      subtitle = tempsubtitle,
+      notes = NA, # notes filled in later in TOST step
       database_id = database_id,
       database_path = tempdb,
       plot_path = NA # Currently no plots for DESC_02/03

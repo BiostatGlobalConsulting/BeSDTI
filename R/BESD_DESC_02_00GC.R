@@ -28,46 +28,12 @@ BESD_DESC_02_00GC <- function(VCP = "BESD_DESC_02_00GC"){
   }
 
   # Exit out for errors once here since we will use DESC_02_DATASET later
-  if(exitflag == 1){
+  if (exitflag == 1){
     besd_global(BESDTI_ERROR, 1)
     besd_halt_immediately(
       halt_message = errormsgs
     )
   }
-
-  # # Make this code backward compatible; in the old days the user simply
-  # # specified RI, TT or SIA for the dataset string and this code assumed
-  # # that the dataset was equal to that string plus _with_ids.dta.
-  # # Now the user is encouraged to specify the name of the dataset explicitly
-  # # but for backward compatibility, if they specify only RI, TT or SIA then
-  # # we check to see if the _with_ids.dta dataset exists.  If it does, we
-  # # concatenate the string _with_ids onto the dataset name global.  If it does
-  # # not exist, but there is a dataset named RI or TT or SIA then we do not
-  # # concatenate onto the global.
-  #
-  # # Strip off the .dta if the user provided it
-  # datname <- gsub(".rds","",DESC_02_DATASET)
-  #
-  # if (str_to_upper(datname) %in% c("RI","SIA", "TT")){
-  #   filename <- paste0(OUTPUT_FOLDER, "/", datname,"_with_ids.rds")
-  #   if (file.exists(filename)){
-  #     besd_global(DESC_02_DATASET,paste0(datname,"_with_ids.rds"))
-  #   }
-  #
-  #   if (!file.exists(filename)){
-  #     if (!file.exists(paste0(OUTPUT_FOLDER, "/", datname,".rds"))){
-  #       errormsgs <- c(errormsgs,
-  #                      paste0("DESC_02_DATASET is ",datname, " but there is no dataset named ",
-  #                             datname, " or named ",datname,"_with_ids in the BeSD-TI output folder."))
-  #       besd_log_comment(VCP, 1, "Error",
-  #                        paste0("DESC_02_DATASET is ",datname, " but there is no dataset named ",
-  #                               datname, " or named ",datname,"_with_ids in the BeSD-TI output folder."))
-  #       exitflag <- 1
-  #     } else{
-  #       besd_global(DESC_02_DATASET,paste0(datname,".rds"))
-  #     }
-  #   }
-  # }
 
   # Confirm dataset exists
   if (!file.exists(paste0(OUTPUT_FOLDER, "/", DESC_02_DATASET))){

@@ -13,7 +13,7 @@
 
 cleanup_BeSDTI_globals <- function(){
 
-  # Remove individual VCQI objects:
+  # Remove individual BeSD-TI objects:
   rm(list = c(
 
     "DATA_FOLDER",
@@ -24,7 +24,7 @@ cleanup_BeSDTI_globals <- function(){
     "VCP",
     "CH_DATASET",
     "CM_DATASET",
-    "COVID_DATASET",
+    "COV_DATASET",
     "OUTPUT_LAYOUT",
     "OUTPUT_VARLIST",
     "SVYDESIGN_SYNTAX",
@@ -78,8 +78,6 @@ cleanup_BeSDTI_globals <- function(){
     "GENERATE_DVS",
     "PREPROCESS_DATA",
     "SAVE_BAR_PLOT_DATA"
-
-
   ), envir = .GlobalEnv) %>% suppressWarnings()
 
   # Remove BeSD-TI objects by pattern:
@@ -92,27 +90,6 @@ cleanup_BeSDTI_globals <- function(){
   rm(list = ls(pattern = '^pct', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '^BESD_CORE_', envir = .GlobalEnv), envir = .GlobalEnv)
   rm(list = ls(pattern = '^REPORT', envir = .GlobalEnv), envir = .GlobalEnv)
-
-
-  # rm(list = ls(pattern = '^n', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^nwtd', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_COVG_01_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_COVG_02_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_COVG_03_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_DOSES_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_COVG_04_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_CONT_01_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_CONT_01B_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_QUAL_01_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_QUAL_02_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_QUAL_07B_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_QUAL_08_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^RI_QUAL_09_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = "SHIFTFROM_", envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = "SHIFTTO_", envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '_TEMP_DATASETS$', envir = .GlobalEnv), envir = .GlobalEnv)
-  #
-  # rm(list = ls(pattern = '^SHIFTWITHIN_', envir = .GlobalEnv), envir = .GlobalEnv)
-  # rm(list = ls(pattern = '^DROPDUP_', envir = .GlobalEnv), envir = .GlobalEnv)
+  rm(list = ls(pattern = '^core_plot_footnote', envir = .GlobalEnv), envir = .GlobalEnv)
 
 }

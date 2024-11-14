@@ -1,4 +1,4 @@
-#' Calculate core BeSD indicators for a child vaccination analysis
+#' Calculate core BeSD indicators for a COVID-19 vaccination analysis
 #'
 #' @param VCP Current program name to be logged, default to be the function name
 #'
@@ -11,21 +11,21 @@
 #' @export
 #'
 #' @examples
-#' besd_ch_core()
+#' besd_covid_core()
 
-# besd_ch_core R version 1.00 - Biostat Global Consulting - 2024-07-23
+# besd_covid_core R version 1.00 - Biostat Global Consulting - 2024-11-13
 
 # *******************************************************************************
 # Change log
 
 # Date 			  Version 	Name			      What Changed
-# 2024-07-23  1.00      Caitlin Clary   Original R version
+# 2024-11-13  1.00      Caitlin Clary   Original R version
 # *******************************************************************************
 
 # TO DO - use relabel options to bring in multilingual strings??
 # TO DO - add logic re: generating plots, tables
 
-besd_ch_core <- function(VCP = "besd_ch_core",
+besd_covid_core <- function(VCP = "besd_covid_core",
                          cleanup = TRUE){
 
   besd_log_comment(VCP, 5, "Flow", "Starting")
@@ -35,16 +35,18 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   exitflag <- 0
   errormsgs <- NULL
 
-  ch_data_file <- "CH_dv.rds"
+  cov_data_file <- "COV_dv.rds"
 
-  if (!file.exists(paste0(OUTPUT_FOLDER, "/", ch_data_file))){
+  if (!file.exists(paste0(OUTPUT_FOLDER, "/", cov_data_file))){
     errormsgs <- c(
       errormsgs,
-      paste0(paste0(OUTPUT_FOLDER, "/", ch_data_file), " does not exist. Did you run gen_ch_dv?"))
+      paste0(OUTPUT_FOLDER, "/", cov_data_file,
+             " does not exist. Did you run gen_cov_dv?"))
 
     besd_log_comment(
       VCP, 1, "Error",
-      paste0(paste0(OUTPUT_FOLDER, "/", ch_data_file), " does not exist. Did you run gen_ch_dv?"))
+      paste0(OUTPUT_FOLDER, "/", cov_data_file,
+             " does not exist. Did you run gen_cov_dv?"))
 
     exitflag <- 1
   }
@@ -200,8 +202,8 @@ besd_ch_core <- function(VCP = "besd_ch_core",
       exitflag <- 1
     } else {
 
-      if (file.exists(paste0(OUTPUT_FOLDER, "/", ch_data_file))){
-        tempdat <- readRDS(paste0(OUTPUT_FOLDER, "/", ch_data_file))
+      if (file.exists(paste0(OUTPUT_FOLDER, "/", cov_data_file))){
+        tempdat <- readRDS(paste0(OUTPUT_FOLDER, "/", cov_data_file))
 
         for (g in seq_along(BESD_CORE_PLOT_STRATIFIER)){
           if (!BESD_CORE_PLOT_STRATIFIER[g] %in% names(tempdat)){
@@ -219,7 +221,7 @@ besd_ch_core <- function(VCP = "besd_ch_core",
             exitflag <- 1
           }
         } # End of BESD_CORE_PLOT_STRATIFIER g loop
-      } # End if ch_data_file exists
+      } # End if cov_data_file exists
     }
   } # End core plot stratifier check
 
@@ -264,68 +266,67 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   # 3 = show all response options *with subtotals* for dichotomized categories
 
   ## Intent indicator ----
-  besd_global(DESC_02_DATASET, ch_data_file)
+  besd_global(DESC_02_DATASET, cov_data_file)
   besd_global(DESC_02_WEIGHTED, BESD_CORE_WEIGHTED)
   besd_global(DESC_02_DENOMINATOR, BESD_CORE_DENOMINATOR)
 
-  besd_global(DESC_02_VARIABLES, "CHI_intent")
+  besd_global(DESC_02_VARIABLES, "COV_intent")
 
   # Dichotomized or with subtotals: set subtotal options
   if (BESD_CORE_TABLE_STRUCTURE %in% c(1, 3)){
     besd_global(DESC_02_N_SUBTOTALS, 2)
 
-    besd_global(DESC_02_SUBTOTAL_LEVELS_1, c(1, 2))
-    besd_global(DESC_02_SUBTOTAL_LEVELS_2, 3)
+    besd_global(DESC_02_SUBTOTAL_LEVELS_1, c(0, 2))
+    besd_global(DESC_02_SUBTOTAL_LEVELS_2, c(1, 3))
   }
 
   # Dichotomized: show subtotals only
   if (BESD_CORE_TABLE_STRUCTURE %in% 1){
     besd_global(DESC_02_SUBTOTAL_LABEL_1, language_string(
-      language_use = language_use, str = "OS_B32")) # "None or some of vaccines in schedule"
+      language_use = language_use, str = "OS_B77")) # "No or not sure"
     besd_global(DESC_02_SUBTOTAL_LABEL_2, language_string(
-      language_use = language_use, str = "OS_B33")) # "All vaccines in schedule"
+      language_use = language_use, str = "OS_B78")) # "Yes or already vaccinated"
 
     besd_global(DESC_02_SHOW_SUBTOTALS_ONLY, "yes")
   }
 
   # Subtotals: set placement of subtotal columns
   if (BESD_CORE_TABLE_STRUCTURE %in% 3){
-    # besd_global(DESC_02_SUBTOTAL_LABEL_1, "Subtotal: None or some of vaccines in schedule")
-    # besd_global(DESC_02_SUBTOTAL_LABEL_2, "Subtotal: All vaccines in schedule")
 
-    besd_global(DESC_02_SUBTOTAL_LABEL_1, paste0(
+        besd_global(DESC_02_SUBTOTAL_LABEL_1, paste0(
       # "Subtotal: "
       language_string(language_use = language_use,
                       str = "OS_B31"), ": ",
-      # "None or some of vaccines in schedule"
+      # "No or not sure"
       language_string(language_use = language_use,
-                      str = "OS_B32")))
+                      str = "OS_B77")))
 
     besd_global(DESC_02_SUBTOTAL_LABEL_2, paste0(
       # "Subtotal: "
       language_string(language_use = language_use,
                       str = "OS_B31"), ": ",
-      # "All vaccines in schedule"
+      # "Yes or already vaccinated"
       language_string(language_use = language_use,
-                      str = "OS_B33")))
+                      str = "OS_B78")))
 
     besd_global(DESC_02_SUBTOTAL_LIST_1, "after 2")
     besd_global(DESC_02_SUBTOTAL_LIST_2, "after 3")
   }
 
+  # Do you want to get a COVID-19 vaccine?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B6"))
+              language_string(language_use = language_use, str = "OS_B55"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
   BESD_DESC_02(cleanup = TRUE, database_id = "intent")
 
   ## ConfB indicator ----
-  besd_global(DESC_02_DATASET, ch_data_file)
+  besd_global(DESC_02_DATASET, cov_data_file)
   besd_global(DESC_02_WEIGHTED, BESD_CORE_WEIGHTED)
   besd_global(DESC_02_DENOMINATOR, BESD_CORE_DENOMINATOR)
 
-  besd_global(DESC_02_VARIABLES, "CHI_confb")
+  besd_global(DESC_02_VARIABLES, "COV_confb")
 
   # Dichotomized or with subtotals: set subtotal options
   if (BESD_CORE_TABLE_STRUCTURE %in% c(1, 3)){
@@ -377,8 +378,9 @@ besd_ch_core <- function(VCP = "besd_ch_core",
     besd_global(DESC_02_SUBTOTAL_LIST_2, "after 4")
   }
 
+  # How important do you think getting a COVID-19 vaccine is for your health?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B7"))
+              language_string(language_use = language_use, str = "OS_B56"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -388,14 +390,16 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   # NOTE - there are only two responses to this question, so
   # BESD_CORE_TABLE_STRUCTURE does not apply here
 
-  besd_global(DESC_02_DATASET, ch_data_file)
+  besd_global(DESC_02_DATASET, cov_data_file)
   besd_global(DESC_02_WEIGHTED, BESD_CORE_WEIGHTED)
   besd_global(DESC_02_DENOMINATOR, BESD_CORE_DENOMINATOR)
 
-  besd_global(DESC_02_VARIABLES, "CHI_normf")
+  besd_global(DESC_02_VARIABLES, "COV_normf")
 
+  # Do you think most of your close family and friends want you to get a
+  # COVID-19 vaccine?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B8"))
+              language_string(language_use = language_use, str = "OS_B62"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -405,24 +409,25 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   # NOTE - there are only two responses to this question, so
   # BESD_CORE_TABLE_STRUCTURE does not apply here
 
-  besd_global(DESC_02_DATASET, ch_data_file)
+  besd_global(DESC_02_DATASET, cov_data_file)
   besd_global(DESC_02_WEIGHTED, BESD_CORE_WEIGHTED)
   besd_global(DESC_02_DENOMINATOR, BESD_CORE_DENOMINATOR)
 
-  besd_global(DESC_02_VARIABLES, "CHI_where")
+  # Do you know where to go to get a COVID-19 vaccine for yourself?
+  besd_global(DESC_02_VARIABLES, "COV_where")
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B9"))
+              language_string(language_use = language_use, str = "OS_B68"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
   BESD_DESC_02(cleanup = TRUE, database_id = "where")
 
   ## Afford indicator ----
-  besd_global(DESC_02_DATASET, ch_data_file)
+  besd_global(DESC_02_DATASET, cov_data_file)
   besd_global(DESC_02_WEIGHTED, BESD_CORE_WEIGHTED)
   besd_global(DESC_02_DENOMINATOR, BESD_CORE_DENOMINATOR)
 
-  besd_global(DESC_02_VARIABLES, "CHI_afford")
+  besd_global(DESC_02_VARIABLES, "COV_afford")
 
   # Dichotomized or with subtotals: set subtotal options
   if (BESD_CORE_TABLE_STRUCTURE %in% c(1, 3)){
@@ -473,9 +478,9 @@ besd_ch_core <- function(VCP = "besd_ch_core",
     besd_global(DESC_02_SUBTOTAL_LIST_2, "after 4")
   }
 
-
+  # How easy is it to pay for COVID-19 vaccination?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B10"))
+              language_string(language_use = language_use, str = "OS_B71"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -496,90 +501,92 @@ besd_ch_core <- function(VCP = "besd_ch_core",
 
   # Rename and label intent variables
   db_intent <- db_intent %>%
-    rename("CHI_intent_desc02_1" = "desc02_1_1", # none
-           "CHI_intent_desc02_2" = "desc02_1_2", # some
-           "CHI_intent_desc02_3" = "desc02_1_3"  # all
+    rename("COV_intent_desc02_1" = "desc02_1_1", # no
+           "COV_intent_desc02_2" = "desc02_1_2", # yes
+           "COV_intent_desc02_3" = "desc02_1_3", # not sure
+           "COV_intent_desc02_4" = "desc02_1_4"  # already vx
            ) %>%
-    mutate(CHI_intent_binary = case_when(
-      CHI_intent == 1 ~ 0,
-      CHI_intent == 2 ~ 0,
-      CHI_intent == 3 ~ 1,
+    mutate(COV_intent_binary = case_when(
+      COV_intent == 0 ~ 0,
+      COV_intent == 1 ~ 1,
+      COV_intent == 2 ~ 0,
+      COV_intent == 3 ~ 1,
       TRUE ~ NA
     ))
 
-  db_intent$CHI_intent_binary <- haven::labelled(
-    db_intent$CHI_intent_binary,
+  db_intent$COV_intent_binary <- haven::labelled(
+    db_intent$COV_intent_binary,
     label = language_string(language_use = language_use, str = "OS_B26"))
 
   # Rename and label confb variables
   db_confb <- db_confb %>%
-    rename("CHI_confb_desc02_1" = "desc02_1_1", # not at all important
-           "CHI_confb_desc02_2" = "desc02_1_2", # a little important
-           "CHI_confb_desc02_3" = "desc02_1_3", # moderately important
-           "CHI_confb_desc02_4" = "desc02_1_4"  # very important
+    rename("COV_confb_desc02_1" = "desc02_1_1", # not at all important
+           "COV_confb_desc02_2" = "desc02_1_2", # a little important
+           "COV_confb_desc02_3" = "desc02_1_3", # moderately important
+           "COV_confb_desc02_4" = "desc02_1_4"  # very important
     ) %>%
-    mutate(CHI_confb_binary = case_when(
-      CHI_confb == 1 ~ 0,
-      CHI_confb == 2 ~ 0,
-      CHI_confb == 3 ~ 1,
-      CHI_confb == 4 ~ 1,
+    mutate(COV_confb_binary = case_when(
+      COV_confb == 1 ~ 0,
+      COV_confb == 2 ~ 0,
+      COV_confb == 3 ~ 1,
+      COV_confb == 4 ~ 1,
       TRUE ~ NA
     ))
 
-  db_confb$CHI_confb_binary <- haven::labelled(
-    db_confb$CHI_confb_binary,
+  db_confb$COV_confb_binary <- haven::labelled(
+    db_confb$COV_confb_binary,
     label = language_string(language_use = language_use, str = "OS_B27"))
 
   # Rename and label normf variables
 
   db_normf <- db_normf %>%
-    rename("CHI_normf_desc02_1" = "desc02_1_1", # no
-           "CHI_normf_desc02_2" = "desc02_1_2"  # yes
+    rename("COV_normf_desc02_1" = "desc02_1_1", # no
+           "COV_normf_desc02_2" = "desc02_1_2"  # yes
     ) %>%
-    mutate(CHI_normf_binary = case_when(
-      CHI_normf == 0 ~ 0,
-      CHI_normf == 1 ~ 1,
+    mutate(COV_normf_binary = case_when(
+      COV_normf == 0 ~ 0,
+      COV_normf == 1 ~ 1,
       TRUE ~ NA
     ))
 
-  db_normf$CHI_normf_binary <- haven::labelled(
-    db_normf$CHI_normf_binary,
+  db_normf$COV_normf_binary <- haven::labelled(
+    db_normf$COV_normf_binary,
     label = language_string(language_use = language_use, str = "OS_B28"))
 
   # Rename and label where variables
 
   db_where <- db_where %>%
-    rename("CHI_where_desc02_1" = "desc02_1_1", # no
-           "CHI_where_desc02_2" = "desc02_1_2"  # yes
+    rename("COV_where_desc02_1" = "desc02_1_1", # no
+           "COV_where_desc02_2" = "desc02_1_2"  # yes
     ) %>%
-    mutate(CHI_where_binary = case_when(
-      CHI_where == 0 ~ 0,
-      CHI_where == 1 ~ 1,
+    mutate(COV_where_binary = case_when(
+      COV_where == 0 ~ 0,
+      COV_where == 1 ~ 1,
       TRUE ~ NA
     ))
 
-  db_where$CHI_where_binary <- haven::labelled(
-    db_where$CHI_where_binary,
+  db_where$COV_where_binary <- haven::labelled(
+    db_where$COV_where_binary,
     label = language_string(language_use = language_use, str = "OS_B29"))
 
   # Rename and label afford variables
 
   db_afford <- db_afford %>%
-    rename("CHI_afford_desc02_1" = "desc02_1_1", # not at all easy
-           "CHI_afford_desc02_2" = "desc02_1_2", # a little easy
-           "CHI_afford_desc02_3" = "desc02_1_3", # moderately easy
-           "CHI_afford_desc02_4" = "desc02_1_4"  # very easy
+    rename("COV_afford_desc02_1" = "desc02_1_1", # not at all easy
+           "COV_afford_desc02_2" = "desc02_1_2", # a little easy
+           "COV_afford_desc02_3" = "desc02_1_3", # moderately easy
+           "COV_afford_desc02_4" = "desc02_1_4"  # very easy
     ) %>%
-    mutate(CHI_afford_binary = case_when(
-      CHI_afford == 1 ~ 0,
-      CHI_afford == 2 ~ 0,
-      CHI_afford == 3 ~ 1,
-      CHI_afford == 4 ~ 1,
+    mutate(COV_afford_binary = case_when(
+      COV_afford == 1 ~ 0,
+      COV_afford == 2 ~ 0,
+      COV_afford == 3 ~ 1,
+      COV_afford == 4 ~ 1,
       TRUE ~ NA
     ))
 
-  db_afford$CHI_afford_binary <- haven::labelled(
-    db_afford$CHI_afford_binary,
+  db_afford$COV_afford_binary <- haven::labelled(
+    db_afford$COV_afford_binary,
     label = language_string(language_use = language_use, str = "OS_B30"))
 
   db_out <- left_join(db_intent, db_confb) %>%
@@ -594,7 +601,7 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   }
 
   # TO DO join stratifiers?
-  tempstrat <- readRDS(paste0(OUTPUT_FOLDER, "/", ch_data_file)) %>%
+  tempstrat <- readRDS(paste0(OUTPUT_FOLDER, "/", cov_data_file)) %>%
     select(
       all_of(vars)
     )
@@ -602,19 +609,19 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   db_out <- db_out %>% left_join(., tempstrat)
 
   saveRDS(db_out,
-          paste0(OUTPUT_FOLDER, "/BESD_CH_CORE_", ANALYSIS_COUNTER, ".rds"))
+          paste0(OUTPUT_FOLDER, "/besd_covid_core_", ANALYSIS_COUNTER, ".rds"))
 
   # TO DO add this dataset to TEMP_DATASETS
 
   # if (MAKE_BAR_PLOTS == 1){
-    besd_core_plot(analysis = "child")
+    besd_core_plot(analysis = "covid")
   # }
 
     # Add logic to include the core outputs in BESDTI_REPORT_INPUTS
     if (MAKE_TEMPLATE_REPORT == 1){
 
       # Copy core plot to report inputs folder
-      plot_name <- paste0("BeSD_Core_", "Child_", ANALYSIS_COUNTER, ".png")
+      plot_name <- paste0("BeSD_Core_", "COVID_", ANALYSIS_COUNTER, ".png")
 
       file.copy(
         from = paste0(OUTPUT_FOLDER, "/Plots_CORE/", plot_name),
@@ -626,7 +633,7 @@ besd_ch_core <- function(VCP = "besd_ch_core",
       }
 
       temp_report_row <- data.frame(
-        indicator = "besd_ch_core",
+        indicator = "besd_covid_core",
         variable = NA,
         label = NA,
         title = "BeSD Core Indicator Plot",

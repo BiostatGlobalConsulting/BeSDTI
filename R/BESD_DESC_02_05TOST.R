@@ -205,9 +205,33 @@ BESD_DESC_02_05TOST <- function(VCP = "BESD_DESC_02_05TOST",
 
     export_table_to_excel(indicator = "DESC_02", sheet = sheetname, brief = FALSE)
 
-    # TESTING - saving TO_DESC_02 to report inputs folder
+    # Save TO_DESC_02 to report inputs folder
 
     if (MAKE_TEMPLATE_REPORT %in% 1){
+
+      BESDTI_REPORT_INPUTS <- get("BESDTI_REPORT_INPUTS", envir = .GlobalEnv)
+
+      getnotes <- TRUE
+      tempnotes <- NULL
+      i <- 1
+      while(getnotes == TRUE){
+        if (besd_object_exists(paste0("DESC_02_TO_FOOTNOTE_", i))){
+          tempnotes <- c(tempnotes, get(paste0("DESC_02_TO_FOOTNOTE_", i), envir = .GlobalEnv))
+          i <- i + 1
+        } else {
+          getnotes <- FALSE
+        }
+      } # end while
+
+      if (!is.null(tempnotes)){
+        tempnotes <- paste(tempnotes, collapse = "  \n")
+      } else {
+        tempnotes <- NA
+      }
+
+      BESDTI_REPORT_INPUTS$notes[nrow(BESDTI_REPORT_INPUTS)] <- tempnotes
+
+      assign("BESDTI_REPORT_INPUTS", BESDTI_REPORT_INPUTS, envir = .GlobalEnv)
 
       RT_DESC_02 <- TO_DESC_02
 
@@ -241,8 +265,6 @@ BESD_DESC_02_05TOST <- function(VCP = "BESD_DESC_02_05TOST",
                              "order", "rowtype")
 
       saveRDS(RT_DESC_02, rt_db_name)
-      # besd_global(REPORT_INDICATOR_LIST, c(REPORT_INDICATOR_LIST, rt_db_name))
-      # besd_global(REPORT_INDICATOR_TITLE_LIST, c(REPORT_INDICATOR_TITLE_LIST, DESC_02_TO_TITLE))
     }
 
     vid = vid + 1
