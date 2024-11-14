@@ -246,6 +246,8 @@ svypd <- function(
 
       # If the standard error is zero, there is no clustering effect, so
       # we set df = N - 1
+      if (is.nan(se)){se <- 0} # Added 2024-10-30
+
       if (se == 0){
         df <- nrow(dat) - 1
       }
