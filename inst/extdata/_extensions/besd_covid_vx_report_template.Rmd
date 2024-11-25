@@ -42,11 +42,11 @@ Data were analysed using the WHO’s freely available Behavioural and Social Dri
 
 The BeSD priority indicators for COVID-19 vaccination are:
 
--   **Confidence in vaccine benefits** (thinking and feeling): percentage of adults/health workers who say a COVID-19 vaccine is moderately or very important for their health
--   **Family norms** (social processes): percentage of adults/health workers who say most of their close family and friends want them to get a COVID-19 vaccine
--   **Intention to get child vaccinated** (motivation): percentage of adults/health workers who say they want to get a COVID-19 vaccine or are already vaccinated
--   **Knowing where to get vaccination** (practical issues): percentage of adults/health workers who say they know where to get a COVID-19 vaccine for themselves
--   **Affordability** (practical issues): percentage of adults/health workers who say that vaccination is moderately or very easy to pay for
+-   **Confidence in vaccine benefits** (thinking and feeling): percentage of `r stringr::str_to_lower(COV_SURVEY_RESPONDENTS)` who say a COVID-19 vaccine is moderately or very important for their health
+-   **Family norms** (social processes): percentage of `r stringr::str_to_lower(COV_SURVEY_RESPONDENTS)` who say most of their close family and friends want them to get a COVID-19 vaccine
+-   **Intention to get child vaccinated** (motivation): percentage of `r stringr::str_to_lower(COV_SURVEY_RESPONDENTS)` who say they want to get a COVID-19 vaccine or are already vaccinated
+-   **Knowing where to get vaccination** (practical issues): percentage of `r stringr::str_to_lower(COV_SURVEY_RESPONDENTS)` who say they know where to get a COVID-19 vaccine for themselves
+-   **Affordability** (practical issues): percentage of `r stringr::str_to_lower(COV_SURVEY_RESPONDENTS)` who say that vaccination is moderately or very easy to pay for
 
 
 ```{r, results = 'asis', echo = FALSE}

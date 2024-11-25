@@ -734,8 +734,8 @@ check_besd_analysis_metadata <- function(VCP = "check_besd_analysis_metadata"){
 
   # Aggregate databases unless (programmer's option) the user asks not to by
   # setting AGGREGATE_DATABASES to something other than 1 (like 0)
-  if (besd_object_exists("AGGREGATE_DATABASES") == FALSE){
-    besd_global(AGGREGATE_DATABASES, 1)}
+  # if (besd_object_exists("AGGREGATE_DATABASES") == FALSE){
+  # besd_global(AGGREGATE_DATABASES, 1)}
 
   if (!is.null(warningmsgs)){
     warning(warningmsgs)

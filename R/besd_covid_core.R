@@ -23,7 +23,6 @@
 # *******************************************************************************
 
 # TO DO - use relabel options to bring in multilingual strings??
-# TO DO - add logic re: generating plots, tables
 
 besd_covid_core <- function(VCP = "besd_covid_core",
                          cleanup = TRUE){
@@ -180,8 +179,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
   #   }
   # }
 
-  # TO DO - consider if multiple stratifiers should be supported here. Perhaps
-  # one plot per stratifier??
+  # Note - currently supporting only one stratifier for the core plot
 
   # Clean up core plot stratifier object
   if (besd_object_exists("BESD_CORE_PLOT_STRATIFIER")){
@@ -246,9 +244,6 @@ besd_covid_core <- function(VCP = "besd_covid_core",
       exitflag <- 1
     }
 
-    # TO DO add check that length = 1 when stratifier is undefined OR length =
-    # number of unique (non-NA??) values in stratifier
-
   } # End color check
 
   if (exitflag == 1){
@@ -283,9 +278,9 @@ besd_covid_core <- function(VCP = "besd_covid_core",
   # Dichotomized: show subtotals only
   if (BESD_CORE_TABLE_STRUCTURE %in% 1){
     besd_global(DESC_02_SUBTOTAL_LABEL_1, language_string(
-      language_use = language_use, str = "OS_B77")) # "No or not sure"
+      language_use = language_use, str = "OS_B82")) # "No or not sure"
     besd_global(DESC_02_SUBTOTAL_LABEL_2, language_string(
-      language_use = language_use, str = "OS_B78")) # "Yes or already vaccinated"
+      language_use = language_use, str = "OS_B83")) # "Yes or already vaccinated"
 
     besd_global(DESC_02_SHOW_SUBTOTALS_ONLY, "yes")
   }
@@ -299,7 +294,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
                       str = "OS_B31"), ": ",
       # "No or not sure"
       language_string(language_use = language_use,
-                      str = "OS_B77")))
+                      str = "OS_B82")))
 
     besd_global(DESC_02_SUBTOTAL_LABEL_2, paste0(
       # "Subtotal: "
@@ -307,7 +302,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
                       str = "OS_B31"), ": ",
       # "Yes or already vaccinated"
       language_string(language_use = language_use,
-                      str = "OS_B78")))
+                      str = "OS_B83")))
 
     besd_global(DESC_02_SUBTOTAL_LIST_1, "after 2")
     besd_global(DESC_02_SUBTOTAL_LIST_2, "after 3")
@@ -315,7 +310,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
 
   # Do you want to get a COVID-19 vaccine?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B55"))
+              language_string(language_use = language_use, str = "OS_B60"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -380,7 +375,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
 
   # How important do you think getting a COVID-19 vaccine is for your health?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B56"))
+              language_string(language_use = language_use, str = "OS_B61"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -399,7 +394,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
   # Do you think most of your close family and friends want you to get a
   # COVID-19 vaccine?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B62"))
+              language_string(language_use = language_use, str = "OS_B67"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -416,7 +411,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
   # Do you know where to go to get a COVID-19 vaccine for yourself?
   besd_global(DESC_02_VARIABLES, "COV_where")
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B68"))
+              language_string(language_use = language_use, str = "OS_B73"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -480,7 +475,7 @@ besd_covid_core <- function(VCP = "besd_covid_core",
 
   # How easy is it to pay for COVID-19 vaccination?
   besd_global(DESC_02_TO_TITLE,
-              language_string(language_use = language_use, str = "OS_B71"))
+              language_string(language_use = language_use, str = "OS_B76"))
   besd_global(DESC_02_TO_SUBTITLE, NA)
   # Footnotes?
 
@@ -611,11 +606,15 @@ besd_covid_core <- function(VCP = "besd_covid_core",
   saveRDS(db_out,
           paste0(OUTPUT_FOLDER, "/besd_covid_core_", ANALYSIS_COUNTER, ".rds"))
 
-  # TO DO add this dataset to TEMP_DATASETS
+  besd_global(TEMP_DATASETS,
+              c(TEMP_DATASETS, paste0("besd_covid_core_", ANALYSIS_COUNTER, ".rds"))
+  )
 
-  # if (MAKE_BAR_PLOTS == 1){
-    besd_core_plot(analysis = "covid")
-  # }
+  if (MAKE_PLOTS == 1){
+    if (MAKE_BAR_PLOTS == 1){
+      besd_core_plot(analysis = "covid")
+    }
+  }
 
     # Add logic to include the core outputs in BESDTI_REPORT_INPUTS
     if (MAKE_TEMPLATE_REPORT == 1){

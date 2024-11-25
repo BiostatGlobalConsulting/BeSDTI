@@ -45,7 +45,7 @@ check_CM_metadata <- function(VCP = "check_CM_metadata"){
         if (exists("CH_DATASET")) {
           psw <- "psweight_ch"
         } else if (exists("COVID_DATASET")) {
-          psw <- "psweight_cv"
+          psw <- "psweight_cov"
         } else {
           psw <- NULL
         }

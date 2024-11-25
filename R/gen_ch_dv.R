@@ -126,4 +126,8 @@ gen_ch_dv <- function(VCP = "gen_ch_dv"){
   saveRDS(
     dat, file = paste0(OUTPUT_FOLDER, "/CH_dv.rds"))
 
+  besd_global(TEMP_DATASETS,
+              c(TEMP_DATASETS, "CH_dv.rds"))
+
+
 }
