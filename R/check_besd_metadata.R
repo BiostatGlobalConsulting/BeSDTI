@@ -98,6 +98,9 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
       ch_data_file <- paste0(DATA_FOLDER, "/", CH_DATASET)
       if (file.exists(ch_data_file)){
         file.copy(from = ch_data_file, to = OUTPUT_FOLDER, overwrite = TRUE)
+
+        besd_global(TEMP_DATASETS,
+                    c(TEMP_DATASETS, CH_DATASET))
       }
 
       if (!file.exists(ch_data_file)){
@@ -261,6 +264,30 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
 
   if (analysis == "covid"){
 
+    if (!besd_object_exists("COV_SURVEY_RESPONDENTS")){
+      errormsgs <- c(
+        errormsgs,
+        "Please define the respondent type for this survey by setting COV_SURVEY_RESPONDENTS")
+
+      exitflag <- 1
+      besd_log_comment(
+        VCP, 1, "Error",
+        "Please define the respondent type for this survey by setting COV_SURVEY_RESPONDENTS")
+    } else {
+
+      if (!stringr::str_to_lower(COV_SURVEY_RESPONDENTS) %in% c("adults", "health workers")){
+        errormsgs <- c(
+          errormsgs,
+          "The value of COV_SURVEY_RESPONDENTS is not valid; accepted values are 'Adults' or 'Health Workers'")
+
+        exitflag <- 1
+        besd_log_comment(
+          VCP, 1, "Error",
+          "The value of COV_SURVEY_RESPONDENTS is not valid; accepted values are 'Adults' or 'Health Workers'")
+      }
+
+    }
+
     if (!besd_object_exists("COV_DATASET")){
       errormsgs <- c(errormsgs,
                      "Please set COV_DATASET")
@@ -272,6 +299,9 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
       cv_data_file <- paste0(DATA_FOLDER, "/", COV_DATASET)
       if (file.exists(cv_data_file)){
         file.copy(from = cv_data_file, to = OUTPUT_FOLDER, overwrite = TRUE)
+
+        besd_global(TEMP_DATASETS,
+                    c(TEMP_DATASETS, COV_DATASET))
       }
 
       if (!file.exists(cv_data_file)){
@@ -286,7 +316,7 @@ check_besd_metadata <- function(VCP = "check_besd_metadata",
                                 cv_data_file, ") does not exist"))
       } else {
 
-        # Read the child dataset
+        # Read the COVID-19 dataset
         dat <- besd_read(cv_data_file)
 
         if (is.data.frame(dat) == FALSE){

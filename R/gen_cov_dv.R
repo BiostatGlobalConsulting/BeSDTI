@@ -126,4 +126,6 @@ gen_cov_dv <- function(VCP = "gen_cov_dv"){
   saveRDS(
     dat, file = paste0(OUTPUT_FOLDER, "/COV_dv.rds"))
 
+  besd_global(TEMP_DATASETS,
+              c(TEMP_DATASETS, "COV_dv.rds"))
 }

@@ -6,7 +6,6 @@
 #' @import dplyr
 #' @import ggplot2
 #' @import stringr
-#' @import ggpattern
 #'
 #' @return Core indicator barplot
 #'
@@ -133,37 +132,73 @@ besd_core_plot <- function(
       "COV_afford_binary"
     )
 
-    core_outcome_labels <- c(
-      # % of adults/health workers who say a COVID-19 vaccine is moderately or
-      # very important for their health
-      language_string(
-        language_use = language_use, str = "OS_B47") %>%
-        stringr::str_wrap(., xlab_wrap),
+    if (stringr::str_to_lower(COV_SURVEY_RESPONDENTS) == "adults"){
+      core_outcome_labels <- c(
+        # % of adults who say a COVID-19 vaccine is moderately or very important
+        # for their health
+        language_string(
+          language_use = language_use, str = "OS_B47") %>%
+          stringr::str_wrap(., xlab_wrap),
 
-      # % of adults/health workers who say most of their close family and
-      # friends want them to get a COVID-19 vaccine
-      language_string(
-        language_use = language_use, str = "OS_B48") %>%
-        stringr::str_wrap(., xlab_wrap),
+        # % of adults who say most of their close family and friends want them
+        # to get a COVID-19 vaccine
+        language_string(
+          language_use = language_use, str = "OS_B48") %>%
+          stringr::str_wrap(., xlab_wrap),
 
-      # % of adults/health workers who say they want to get a COVID-19 vaccine
-      # or are already vaccinated
-      language_string(
-        language_use = language_use, str = "OS_B49") %>%
-        stringr::str_wrap(., xlab_wrap),
+        # % of adults who say they want to get a COVID-19 vaccine or are already
+        # vaccinated
+        language_string(
+          language_use = language_use, str = "OS_B49") %>%
+          stringr::str_wrap(., xlab_wrap),
 
-      # % of adults/health workers who say they know where to get a COVID-19
-      # vaccine for themselves
-      language_string(
-        language_use = language_use, str = "OS_B50") %>%
-        stringr::str_wrap(., xlab_wrap),
+        # % of adults who say they know where to get a COVID-19 vaccine for
+        # themselves
+        language_string(
+          language_use = language_use, str = "OS_B50") %>%
+          stringr::str_wrap(., xlab_wrap),
 
-      # % of adults/health workers who say COVID-19 vaccination is moderately or
-      # very easy to pay for
-      language_string(
-        language_use = language_use, str = "OS_B51") %>%
-        stringr::str_wrap(., xlab_wrap)
-    )
+        # % of adults who say COVID-19 vaccination is moderately or very easy to
+        # pay for
+        language_string(
+          language_use = language_use, str = "OS_B51") %>%
+          stringr::str_wrap(., xlab_wrap)
+      )
+    }
+
+    if (stringr::str_to_lower(COV_SURVEY_RESPONDENTS) == "health workers"){
+      core_outcome_labels <- c(
+        # % of health workers who say a COVID-19 vaccine is moderately or very important
+        # for their health
+        language_string(
+          language_use = language_use, str = "OS_B52") %>%
+          stringr::str_wrap(., xlab_wrap),
+
+        # % of health workers who say most of their close family and friends want them
+        # to get a COVID-19 vaccine
+        language_string(
+          language_use = language_use, str = "OS_B53") %>%
+          stringr::str_wrap(., xlab_wrap),
+
+        # % of health workers who say they want to get a COVID-19 vaccine or are already
+        # vaccinated
+        language_string(
+          language_use = language_use, str = "OS_B54") %>%
+          stringr::str_wrap(., xlab_wrap),
+
+        # % of health workers who say they know where to get a COVID-19 vaccine for
+        # themselves
+        language_string(
+          language_use = language_use, str = "OS_B55") %>%
+          stringr::str_wrap(., xlab_wrap),
+
+        # % of health workers who say COVID-19 vaccination is moderately or very easy to
+        # pay for
+        language_string(
+          language_use = language_use, str = "OS_B56") %>%
+          stringr::str_wrap(., xlab_wrap)
+      )
+    }
 
     header_labels <- c(
       # Confidence in vaccine benefits
@@ -178,7 +213,7 @@ besd_core_plot <- function(
 
       # Intention to get vaccinated
       language_string(
-        language_use = language_use, str = "OS_B52"
+        language_use = language_use, str = "OS_B57"
       ) %>% stringr::str_wrap(., 16),
 
       # Know where to get vaccinated

@@ -24,7 +24,7 @@ establish_unique_CH_ids <- function(VCP = "establish_unique_CH_ids"){
 
   besd_log_comment(VCP, 5, "Flow", "Starting")
 
-  if (!CHECK_INSTEAD_OF_RUN %in% 1){
+  # if (!CHECK_INSTEAD_OF_RUN %in% 1){
 
     dat <- besd_read(paste0(OUTPUT_FOLDER, "/", CH_DATASET)) %>%
       mutate(
@@ -91,6 +91,22 @@ establish_unique_CH_ids <- function(VCP = "establish_unique_CH_ids"){
       rename(psweight = psweight_ch) %>%
       select(-contains("dataframe"))
 
+    # 2024-11-22: if weights var was psweight_ch, swap in psweight
+    if ("weights" %in% names(SVYDESIGN_SYNTAX)){
+      if (!is.null(SVYDESIGN_SYNTAX$weights)){
+        if (SVYDESIGN_SYNTAX$weights == "~psweight_ch"){
+          besd_global(SVYDESIGN_SYNTAX,
+            list(
+              ids = SVYDESIGN_SYNTAX$ids,
+              strata = SVYDESIGN_SYNTAX$strata,
+              weights = ~psweight,
+              fpc = SVYDESIGN_SYNTAX$fpc,
+              nest = SVYDESIGN_SYNTAX$nest
+            ))
+        }
+      }
+    }
+
     # If Clusternum is unique within Districtname, we can simply use Clusternum
     # as the clusterid; otherwise we want to make a unique clusterid
 
@@ -112,6 +128,22 @@ establish_unique_CH_ids <- function(VCP = "establish_unique_CH_ids"){
     }
 
     dat <- select(dat, -c(rowid, dropthis1, dropthis2))
+
+    # 2024-11-22: if ids (cluster) var was Clusternum, swap in clusterid
+    if ("ids" %in% names(SVYDESIGN_SYNTAX)){
+      if (!is.null(SVYDESIGN_SYNTAX$ids)){
+        if (SVYDESIGN_SYNTAX$ids == "~Clusternum"){
+          besd_global(SVYDESIGN_SYNTAX,
+                      list(
+                        ids = ~clusterid,
+                        strata = SVYDESIGN_SYNTAX$strata,
+                        weights = SVYDESIGN_SYNTAX$weights,
+                        fpc = SVYDESIGN_SYNTAX$fpc,
+                        nest = SVYDESIGN_SYNTAX$nest
+                      ))
+        }
+      }
+    }
 
     dat <- dat %>% arrange(Districtname, clusterid, Housenum ) %>%
       group_by(Districtname, clusterid, Housenum) %>%
@@ -171,7 +203,7 @@ establish_unique_CH_ids <- function(VCP = "establish_unique_CH_ids"){
 
     # Save updated CH_with_ids
     saveRDS(dat, file = paste0(OUTPUT_FOLDER, "/CH_with_ids.rds"))
-  }
+  #} # end check instead of run if()
 
   besd_log_comment(VCP, 5, "Flow", "Exiting")
 }

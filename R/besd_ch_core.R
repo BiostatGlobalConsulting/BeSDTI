@@ -23,7 +23,6 @@
 # *******************************************************************************
 
 # TO DO - use relabel options to bring in multilingual strings??
-# TO DO - add logic re: generating plots, tables
 
 besd_ch_core <- function(VCP = "besd_ch_core",
                          cleanup = TRUE){
@@ -178,8 +177,7 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   #   }
   # }
 
-  # TO DO - consider if multiple stratifiers should be supported here. Perhaps
-  # one plot per stratifier??
+  # Note - currently supporting only one stratifier for the core plot
 
   # Clean up core plot stratifier object
   if (besd_object_exists("BESD_CORE_PLOT_STRATIFIER")){
@@ -243,9 +241,6 @@ besd_ch_core <- function(VCP = "besd_ch_core",
 
       exitflag <- 1
     }
-
-    # TO DO add check that length = 1 when stratifier is undefined OR length =
-    # number of unique (non-NA??) values in stratifier
 
   } # End color check
 
@@ -604,11 +599,15 @@ besd_ch_core <- function(VCP = "besd_ch_core",
   saveRDS(db_out,
           paste0(OUTPUT_FOLDER, "/BESD_CH_CORE_", ANALYSIS_COUNTER, ".rds"))
 
-  # TO DO add this dataset to TEMP_DATASETS
+  besd_global(TEMP_DATASETS,
+              c(TEMP_DATASETS, paste0("BESD_CH_CORE_", ANALYSIS_COUNTER, ".rds"))
+  )
 
-  # if (MAKE_BAR_PLOTS == 1){
-    besd_core_plot(analysis = "child")
-  # }
+  if (MAKE_PLOTS == 1){
+    if (MAKE_BAR_PLOTS == 1){
+      besd_core_plot(analysis = "child")
+    }
+  }
 
     # Add logic to include the core outputs in BESDTI_REPORT_INPUTS
     if (MAKE_TEMPLATE_REPORT == 1){

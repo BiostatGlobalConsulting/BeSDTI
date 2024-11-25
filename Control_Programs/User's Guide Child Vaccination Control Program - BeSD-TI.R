@@ -114,78 +114,20 @@ besd_global(MAKE_TEMPLATE_REPORT, 1)
 # MAKE_PLOTS must be 1 for any plots to be made
 besd_global(MAKE_PLOTS, 1)
 
-# Set PLOT_OUTCOMES_IN_TABLE_ORDER to 1 if you want inchworm and unweighted
-# plots to list strata in the same order as the tables; otherwise the strata
-# will be sorted by the outcome and shown in bottom-to-top order of increasing
-# indicator performance
-besd_global(PLOT_OUTCOMES_IN_TABLE_ORDER, 0)
-
 # Make bar plots? Set to 1 for yes
 besd_global(MAKE_BAR_PLOTS, 1)
 
-# Text at right side of bar plots
-# 1 1-sided 95% LCB | Point Estimate | 1-sided 95% UCB
-# 2 Point Estimate (2-sided 95% Confidence Interval)  [THIS IS THE DEFAULT]
-# 3 Point Estimate (2-sided 95% Confidence Interval) (0, 1-sided 95% UCB]
-# 4 Point Estimate (2-sided 95% Confidence Interval) [1-sided 95% UCB, 100)
-# 5 Point Estimate (2-sided 95% CI) (0, 1-sided 95% UCB] [1-sided 95% LCB, 100)
-besd_global(BAR_PLOT_CITEXT, 2)
-
-# Text at right side of double bar plots
-# 1 (default) means show both point estimates
-# 2 means show both point estimates and both 2-sided 95% CIs
-# 3 means do not show any text
-besd_global(DOUBLE_BAR_PLOT_CITEXT, 1)
-
-# Make unweighted sample proportion plots? Set to 1 for yes.
-besd_global(MAKE_UW_PLOTS, 1)
-
-# Annotate text in the unweighted plot for small sample sizes? Set 1 for yes.
-besd_global(UWPLOT_ANNOTATE_LOW_MED, 0)
-# Add square brackets around N < UWPLOT_ANNOTATE_LOW_N; default is 25
-besd_global(UWPLOT_ANNOTATE_LOW_N, NA)
-# Add parentheses around N < UWPLOT_ANNOTATE_MED_N; default is 50
-besd_global(UWPLOT_ANNOTATE_MED_N, NA)
-
-# Make organ pipe plots? Set to 1 for yes.
-besd_global(MAKE_OP_PLOTS, 1)
-
-# Save the data underlying each organ pipe plot?  Set to 1 for yes.
-# Recall that organ pipe plots do not include many quantitative details
-# and do not list the cluster id for any of the bars.
-#
-# If this option is turned on, (set to 1) then the organ pipe plot program
-# will save a dataset in the Plots_OP folder for each plot.  The dataset will
-# list the cluster id for each bar in the plot along with its height and width.
-# This makes it possible to identify which cluster id goes with which bar in
-# the plot and to understand the quantitative details of each bar.
-besd_global(SAVE_OP_PLOT_DATA, 1)
-
-# Save the data underlying inchworm plots/bar plots? Set to 1 for yes.
-# If this option is turned on, inchworm and barplot programs will save a dataset
-# in the Plots_IW_UW folder that makes it possible to understand the quantitative
-# details of each plot component and can be used to recreate the plot.
+# Save the data underlying bar plots? Set to 1 for yes. If this option is turned
+# on, inchworm and barplot programs will save a dataset in the corresponding
+# plots folder that makes it possible to understand the quantitative details of
+# each plot component and can be used to recreate the plot.
 besd_global(SAVE_BAR_PLOT_DATA, 1)
 
-# Save the data underlying unweighted plots? Set to 1 for yes.
-# If this option is turned on, unweighted plot programs will save a dataset
-# in the Plots_IW_UW folder that makes it possible to understand the quantitative
-# details of each plot component and can be used to recreate the plot.
-besd_global(SAVE_UW_PLOT_DATA, 1)
-
-# Specify whether the code should save BeSD-TI output databases
-#
-# WARNING!! If this macro is set to 1, BeSD-TI will delete ALL files that
-# end in _database.rds in the OUTPUT_FOLDER at the end of the run
-# If you want to save the databases, change the value to 0.
-# (Usually 1)
+# Specify whether the code should delete or save BeSD-TI output databases.
+# WARNING!! If this global is set to 1, BeSD-TI will delete ALL files that end
+# in _database.rds in the OUTPUT_FOLDER at the end of the run. If you want to
+# save the databases, change the value to 0.
 besd_global(DELETE_DATABASES_AT_END, 1)
-
-# If you wish to aggregate files that end
-# in _database.rds into a single dataset, set the
-# DELETE_DATABASES_AT_END option to 0 and set the
-# AGGREGATE_DATABASES option to 1.
-besd_global(AGGREGATE_DATABASES, 1)
 
 # Specify whether the code should delete intermediate datasets
 # at the end of the analysis (Usually 1)
@@ -197,26 +139,12 @@ besd_global(DELETE_TEMP_DATASETS, 1)
 # language file, the options are ENGLISH, SPANISH, FRENCH, or PORTUGUESE. Users
 # can modify this file to add their own language(s) - for instructions on adding
 # a language, see the BeSD-TI User's Guide.
-
 besd_global(OUTPUT_LANGUAGE, "English")
 
 # Specify the file to use when populating table and figure text. Omit this
 # global or set it to "default" to use the standard BeSD-TI language file, or
 # specify a file path if using a user-modified file.
-
 besd_global(LANGUAGE_FILE, "default")
-
-# Specify the row character cut off length for plot titles - meaning if a title
-# is > ### characters it will be split onto the next line(s). Set to NA if
-# titles should not be wrapped to additional lines.
-besd_global(TITLE_CUTOFF, NA)
-
-# Specify the row character cut off length for plot footnotes - meaning if a
-# footnote is > ### characters it will be split onto the next line(s). Set to NA
-# if footnotes should not be wrapped to additional lines.
-besd_global(FOOTNOTE_CUTOFF, NA)
-
-besd_global(CHECK_INSTEAD_OF_RUN, 0)
 
 # *************************************************
 # Code Block E                 (Do not change) ----
@@ -602,17 +530,16 @@ besd_global(DESC_03_RELABEL_LABEL_1,
 
 BESD_DESC_03(cleanup = TRUE, database_id = "quali")
 
-# ..............................................................................
+# *************************************************
+# Code Block G                 (Do not change) ----
+#
+# Exit gracefully
+
 # Compile report
 
 if (MAKE_TEMPLATE_REPORT == 1){
   besd_report(analysis = "child")
 }
-
-# *************************************************
-# Code Block G                 (Do not change) ----
-#
-# Exit gracefully
 
 # 1. Close the datasets that hold the results of hypothesis tests and put them
 #    into the output spreadsheet
