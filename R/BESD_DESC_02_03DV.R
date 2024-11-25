@@ -45,7 +45,7 @@ BESD_DESC_02_03DV <- function(VCP = "BESD_DESC_02_03DV", database_id = NA){
     var2 <- get(DESC_02_VARIABLES[v], dat)
 
     var2 <- zap_labels(var2)
-    if (class(var2) == "character"){
+    if ("character" %in% class(var2)){
       if (length(which(var == "" %in% TRUE)) > 0){
         var[which(var == "")] <- NA # replace "" to NA
         dat <- dat %>% mutate(!!va := ifelse(!!va == "", NA_character_, !!va))
@@ -88,15 +88,15 @@ BESD_DESC_02_03DV <- function(VCP = "BESD_DESC_02_03DV", database_id = NA){
     # Detach the value labels from the variable
     var <- zap_labels(var)
     # Get the variable type
-    if (class(var) == "character"){
+    if ("character" %in% class(var)){
       vtype <- "string"
     }
 
-    if (class(var) %in% c("numeric", "integer", "double")){
+    if (any(class(var) %in% c("numeric", "integer", "double"))){
       vtype <- "number"
     }
 
-    if (class(var) == "logical"){
+    if ("logical" %in% class(var)){
       dat <- dat %>% mutate(!!va := as.numeric(!!va))
       vtype <- "number"
     }

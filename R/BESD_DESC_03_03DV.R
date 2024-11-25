@@ -138,11 +138,13 @@ BESD_DESC_03_03DV <- function(VCP = "BESD_DESC_03_03DV",
 
     names(dat)[which(names(dat) == "tempvar1")] <- paste0("desc03_", vcounter, "_", lcounter)
 
-    dat <- dat %>% relocate(paste0("desc03_", vcounter, "_", lcounter), .after = DESC_03_VARIABLES[v])
+    dat <- dat %>%
+      relocate(paste0("desc03_", vcounter, "_", lcounter),
+               .after = DESC_03_VARIABLES[v])
     lcounter <- lcounter + 1
   } # end of DESC_03_VARIABLES v loop
 
-  # Do besd_global in seperate steps since the name depends on another global
+  # Do besd_global in separate steps since the name depends on another global
   assign(paste0("DESC_03_LVL_COUNT_", vcounter), lcounter-1, envir = .GlobalEnv)
   besd_log_comment(VCP, 3, "Global", paste0("Global value DESC_03_LVL_COUNT_", vcounter, " is ", lcounter-1))
 
@@ -192,6 +194,9 @@ BESD_DESC_03_03DV <- function(VCP = "BESD_DESC_03_03DV",
               NA, tempvar2)
           ) %>% select(-tempvar3)
 
+        dat$tempvar2 <- haven::labelled(dat$tempvar2, label = sublabel) %>%
+          suppressWarnings()
+
         names(dat)[which(names(dat) == "tempvar2")] <- paste0("desc03_", vcounter, "_st", i)
 
         if (i == 1){
@@ -208,7 +213,7 @@ BESD_DESC_03_03DV <- function(VCP = "BESD_DESC_03_03DV",
       } # end of DESC_03_N_SUBTOTALS i loop
     }
 
-    # Do besd_global in seperate steps since the name depends on another global
+    # Do besd_global in separate steps since the name depends on another global
     assign(paste0("DESC_03_ST_COUNT_", vcounter),
            DESC_03_N_SUBTOTALS, envir = .GlobalEnv)
 
