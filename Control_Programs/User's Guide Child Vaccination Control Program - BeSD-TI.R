@@ -222,6 +222,8 @@ besd_global(BESD_CORE_PLOT_COLORS, NA)
 # core indicator is measuring? Set to 1 to show headers (recommended)
 besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 1)
 
+# Suppress results in core plot when N is under a specified threshold?
+besd_global(BESD_CORE_PLOT_SUPPRESS_LOW_N, 25)
 
 besd_ch_core(cleanup = TRUE)
 
