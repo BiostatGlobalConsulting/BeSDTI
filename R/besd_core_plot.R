@@ -437,22 +437,30 @@ besd_core_plot <- function(
       outcome = factor(outcome, levels = core_outcomes,
                        labels = core_outcome_labels),
       label = as.character(label),
-      estimate_plot = estimate)
+      estimate_plot = estimate,
+      suppress = 0)
 
   if (besd_object_exists("BESD_CORE_PLOT_SUPPRESS_LOW_N")){
 
     if (is.numeric(as.numeric(BESD_CORE_PLOT_SUPPRESS_LOW_N))){
 
+      BESD_CORE_PLOT_SUPPRESS_LOW_N <- as.numeric(BESD_CORE_PLOT_SUPPRESS_LOW_N)
+
       plotdat <- plotdat %>%
         mutate(suppress = ifelse(n < BESD_CORE_PLOT_SUPPRESS_LOW_N, 1, 0),
                estimate_plot = ifelse(suppress == 1, 0, estimate_plot))
 
-      footnote_suppress <- paste0(
-        "Results are suppressed when n < ", BESD_CORE_PLOT_SUPPRESS_LOW_N
-      )
+      # Only show result suppression footnote when 1+ bars suppressed
+      if (sum(plotdat$suppress, na.rm = TRUE) > 0){
+        footnote_suppress <- paste0(
+          "* Results are suppressed when n < ", BESD_CORE_PLOT_SUPPRESS_LOW_N
+        )
+      } else {
+        footnote_suppress <- NULL
+      }
 
     } else {
-      # Add warning message when suppress isn't a number
+      # TO DO add warning message when suppress isn't a number
 
       footnote_suppress <- NULL
 
@@ -463,28 +471,31 @@ besd_core_plot <- function(
     plotdat <- plotdat %>% mutate(suppress = 0)
   }
 
-  if (besd_object_exists("BESD_CORE_PLOT_ANNOTATE_LOW_N")){
+  plotdat <- plotdat %>% mutate(suppresstext = ifelse(suppress > 0 & n > 0, "*", ""))
 
-    if (is.numeric(as.numeric(BESD_CORE_PLOT_ANNOTATE_LOW_N))){
 
-      plotdat <- plotdat %>%
-        mutate(annotate = ifelse(n < BESD_CORE_PLOT_ANNOTATE_LOW_N, 1, 0))
-
-      footnote_annotate <- paste0(
-        "Results are annotated when n < ", BESD_CORE_PLOT_ANNOTATE_LOW_N
-      )
-
-    } else {
-      # Add warning message when annotate isn't a number
-
-      footnote_annotate <- NULL
-
-      plotdat <- plotdat %>% mutate(annotate = 0)
-    }
-  } else {
-    footnote_annotate <- NULL
-    plotdat <- plotdat %>% mutate(annotate = 0)
-  }
+  # if (besd_object_exists("BESD_CORE_PLOT_ANNOTATE_LOW_N")){
+  #
+  #   if (is.numeric(as.numeric(BESD_CORE_PLOT_ANNOTATE_LOW_N))){
+  #
+  #     plotdat <- plotdat %>%
+  #       mutate(annotate = ifelse(n < BESD_CORE_PLOT_ANNOTATE_LOW_N, 1, 0))
+  #
+  #     footnote_annotate <- paste0(
+  #       "Results are annotated when n < ", BESD_CORE_PLOT_ANNOTATE_LOW_N
+  #     )
+  #
+  #   } else {
+  #     # Add warning message when annotate isn't a number
+  #
+  #     footnote_annotate <- NULL
+  #
+  #     plotdat <- plotdat %>% mutate(annotate = 0)
+  #   }
+  # } else {
+  #   footnote_annotate <- NULL
+  #   plotdat <- plotdat %>% mutate(annotate = 0)
+  # }
 
   headerdat <- plotdat %>%
     select(outcome_temp, outcome) %>% unique() %>%
@@ -531,16 +542,17 @@ besd_core_plot <- function(
   }
 
   if (besd_object_exists("BESD_CORE_PLOT_SUPPRESS_LOW_N")){
-    core_plot_footnote <- paste(
-      core_plot_footnote, footnote_suppress, sep = "\n"
-    )
+    if (!is.null(footnote_suppress)){
+      core_plot_footnote <- paste(
+        core_plot_footnote, footnote_suppress, sep = "\n"
+      )}
   }
 
-  if (besd_object_exists("BESD_CORE_PLOT_ANNOTATE_LOW_N")){
-    core_plot_footnote <- paste(
-      core_plot_footnote, footnote_annotate, sep = "\n"
-    )
-  }
+  # if (besd_object_exists("BESD_CORE_PLOT_ANNOTATE_LOW_N")){
+  #   core_plot_footnote <- paste(
+  #     core_plot_footnote, footnote_annotate, sep = "\n"
+  #   )
+  # }
 
 
   # Background colors ----
@@ -578,11 +590,15 @@ besd_core_plot <- function(
                 color = "white",
                 alpha = 0.5) +
       geom_bar(
-        aes(y = 100*estimate, x = outcome,
+        aes(y = 100*estimate_plot, x = outcome,
             fill = label),
         stat = "identity", position = "dodge", color = "grey10") +
       scale_y_continuous(limits = c(0, plot_ymax),
                          breaks = c(0, 25, 50, 75, 100)) +
+      geom_text(data = plotdat,
+                aes(y = 5, x = outcome, label = suppresstext, fill = label),
+                position = position_dodge2(width = 0.9),
+                size = 8) +
       xlab("") + ylab("") +
       theme_minimal() +
       labs(fill = stratifier_label) +
@@ -601,14 +617,12 @@ besd_core_plot <- function(
         panel.grid.minor.y = element_blank(),
         legend.text = element_text(size = axis_text_size)
       ) +
-      # {if (besd_object_exists("BESD_CORE_PLOT_CAPTION")) labs(
-      #   caption = BESD_CORE_PLOT_CAPTION)} +
       {if (BESD_CORE_PLOT_SHOW_HEADERS %in% 1) geom_text(
         data = headerdat,
         aes(y = 107, x = outcome, label = header_label), fontface = "bold", size = header_size)} +
       labs(caption = core_plot_footnote)
   } else {
-    pl_out <- ggplot(data = plotdat) +
+    pl_out <- ggplot(data = filter(plotdat, !suppress > 0)) +
       geom_rect(data = core_shading,
                 aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
                 fill = c(core_yellow, core_green, core_red, core_blue, core_blue),
@@ -620,6 +634,10 @@ besd_core_plot <- function(
         fill = manual_plot_cols, color = "grey10") +
       scale_y_continuous(limits = c(0, plot_ymax),
                          breaks = c(0, 25, 50, 75, 100)) +
+      geom_text(data = plotdat,
+                aes(y = 5, x = outcome, label = suppresstext), #, fill = label),
+                position = position_dodge2(width = 0.9),
+                size = 8) +
       xlab("") + ylab("") +
       theme_minimal() +
       theme(
@@ -631,13 +649,13 @@ besd_core_plot <- function(
         panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_blank()
       ) +
-      # {if (besd_object_exists("BESD_CORE_PLOT_CAPTION")) labs(
-      #   caption = BESD_CORE_PLOT_CAPTION)} +
       {if (BESD_CORE_PLOT_SHOW_HEADERS %in% 1) geom_text(
         data = headerdat,
         aes(y = 105, x = outcome, label = header_label), fontface = "bold", size = header_size)} +
       labs(caption = core_plot_footnote)
   }
+
+  # browser()
 
   if (!dir.exists(paste0(OUTPUT_FOLDER, "/Plots_CORE"))){
     dir.create(paste0(OUTPUT_FOLDER, "/Plots_CORE"))

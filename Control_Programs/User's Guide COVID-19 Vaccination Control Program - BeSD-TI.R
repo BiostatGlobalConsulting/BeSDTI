@@ -65,6 +65,11 @@ besd_global(COV_DATASET, "BeSD_Covid_Data_Faux_2024-11-14.rds")
 # Name of dataset that holds cluster metadata (optional)
 besd_global(CM_DATASET, "BeSD_CM_COVID_Data_Faux_2024-11-14.rds")
 
+# Surveys about the BeSD of COVID-19 vaccination are sometimes administered to
+# health workers and sometimes administered to a general population of adults.
+# Specify the respondent type for this survey:
+besd_global(COV_SURVEY_RESPONDENTS, "Health Workers") # Valid values: 'Health Workers' or 'Adults'
+
 # Output layout parameters
 
 # The output layout parameters determine the geographic and/or demographic
@@ -296,6 +301,9 @@ besd_global(BESD_CORE_PLOT_COLORS, NA)
 # core indicator is measuring? Set to 1 to show headers (recommended)
 besd_global(BESD_CORE_PLOT_SHOW_HEADERS, 1)
 
+# Suppress results in core plot when N is under a specified threshold?
+besd_global(BESD_CORE_PLOT_SUPPRESS_LOW_N, 25)
+
 besd_covid_core(cleanup = TRUE)
 
 # --------------------------------------------------------------------------
@@ -309,7 +317,7 @@ besd_global(DESC_02_VARIABLES, "COV_risks")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B53"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B58"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -328,7 +336,7 @@ besd_global(DESC_02_VARIABLES, "COV_vaccs")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B54"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B59"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -347,7 +355,7 @@ besd_global(DESC_02_VARIABLES, "COV_confs")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B57"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B62"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -366,7 +374,7 @@ besd_global(DESC_02_VARIABLES, "COV_seefr")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B58"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B63"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -385,7 +393,7 @@ besd_global(DESC_02_VARIABLES, "COV_confh")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B59"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B64"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -404,7 +412,7 @@ besd_global(DESC_02_VARIABLES, "COV_normp")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B60"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B65"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -423,7 +431,7 @@ besd_global(DESC_02_VARIABLES, "COV_normw")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B61"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B66"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -443,7 +451,7 @@ besd_global(DESC_02_VARIABLES, "COV_normr")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B63"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B68"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -462,7 +470,7 @@ besd_global(DESC_02_VARIABLES, "COV_normc")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B64"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B69"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -481,7 +489,7 @@ besd_global(DESC_02_VARIABLES, "COV_rechcw")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B65"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B70"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -500,7 +508,7 @@ besd_global(DESC_02_VARIABLES, "COV_recall")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B66"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B71"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -519,7 +527,7 @@ besd_global(DESC_02_VARIABLES, "COV_travel")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B67"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B72"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -538,7 +546,7 @@ besd_global(DESC_02_VARIABLES, "COV_where")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B68"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B73"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -557,7 +565,7 @@ besd_global(DESC_02_VARIABLES, "COV_onsite")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B69"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B74"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -576,7 +584,7 @@ besd_global(DESC_02_VARIABLES, "COV_access")
 besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
-besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B70"))
+besd_global(DESC_02_TO_TITLE, language_string(language_use = language_use, str = "OS_B75"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -603,7 +611,7 @@ besd_global(DESC_03_DENOMINATOR, "ALL")
 besd_global(DESC_03_SELECTED_VALUE, 1)
 
 besd_global(DESC_03_TO_TITLE,
-            language_string(language_use = language_use, str = "OS_B72"))
+            language_string(language_use = language_use, str = "OS_B77"))
 besd_global(DESC_03_TO_SUBTITLE, NA)
 
 # Relabel COV_lowacelse to simply say "Other"
@@ -623,7 +631,7 @@ besd_global(DESC_02_WEIGHTED, "NO")
 besd_global(DESC_02_DENOMINATOR, "RESPONDED")
 
 besd_global(DESC_02_TO_TITLE,
-            language_string(language_use = language_use, str = "OS_B73"))
+            language_string(language_use = language_use, str = "OS_B78"))
 
 besd_global(DESC_02_TO_SUBTITLE, NA) # No subtitle
 
@@ -650,7 +658,7 @@ besd_global(DESC_03_DENOMINATOR, "ALL")
 besd_global(DESC_03_SELECTED_VALUE, 1)
 
 besd_global(DESC_03_TO_TITLE,
-            language_string(language_use = language_use, str = "OS_B74"))
+            language_string(language_use = language_use, str = "OS_B79"))
 besd_global(DESC_03_TO_SUBTITLE, NA)
 
 # Relabel COV_qualielse to simply say "Other"
