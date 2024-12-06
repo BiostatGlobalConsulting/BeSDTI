@@ -522,7 +522,7 @@ besd_core_plot <- function(
 
   if (stringr::str_to_upper(BESD_CORE_WEIGHTED) == "NO"){
     besd_global(core_plot_footnote1,
-                language_string(language_use = language_use, str = "OS_B43"))
+                language_string(language_use = language_use, str = "OS_B44"))
   }
 
   if (stringr::str_to_upper(BESD_CORE_DENOMINATOR) == "ALL"){
