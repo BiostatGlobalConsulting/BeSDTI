@@ -1,6 +1,6 @@
 Package: BeSDTI
 Title: Behavioral and Social Drivers of Vaccination: Tools for Inference
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
     person("Dale", "Rhoda", ,"Dale.Rhoda@biostatglobal.com", 
         role = "aut", 
