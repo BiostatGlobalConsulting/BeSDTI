@@ -58,10 +58,10 @@ besd_log_comment(VCP, 3, "Package",
 # .rds, .dta, .csv
 
 # Name of dataset that holds childhood vaccination BeSD data
-besd_global(CH_DATASET, "BeSD_Child_Data_Faux_2024-09-19.rds")
+besd_global(CH_DATASET, "BeSD_Child_Data_Faux_2024-12-13.rds")
 
 # Name of dataset that holds cluster metadata (optional)
-besd_global(CM_DATASET, "BeSD_CM_Data_Faux_2024-09-19.rds")
+besd_global(CM_DATASET, "BeSD_CM_Data_Faux_2024-12-13.rds")
 
 # Output layout parameters
 
