@@ -1,6 +1,7 @@
 #' Calculate core BeSD indicators for a COVID-19 vaccination analysis
 #'
 #' @param VCP Current program name to be logged, default to be the function name
+#' @param cleanup Clean up global settings after run
 #'
 #' @import dplyr
 #' @import stringr

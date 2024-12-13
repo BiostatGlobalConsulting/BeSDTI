@@ -1,7 +1,7 @@
 #' Response to multiple-choice question where the respondent may select more than one response option.
 #'
 #' @param VCP Current program name to be logged, default to be the function name
-#' @param database_id Tag for file names
+#' @param database_id Custom tag for output file names (optional)
 #' @param cleanup Clean up DESC_03 global settings after run
 #'
 #' @return Derived variables, databases and tables

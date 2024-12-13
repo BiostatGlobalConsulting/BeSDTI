@@ -2,6 +2,7 @@
 #'
 #' @param language_use The global that stored the language the user choose
 #' @param str The string to be retrieved from the language file
+#' @param replaceq Option for rendering quotation marks
 #'
 #' @return A string
 #'

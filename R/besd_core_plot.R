@@ -32,12 +32,12 @@
 
 # Also want to try to get ggpattern working for annotating bars with small sample size
 
-xlab_wrap <- 23
-
 besd_core_plot <- function(
     VCP = "besd_core_plot",
     analysis
 ){
+
+  xlab_wrap <- 23
 
   # Define dataset and outcomes ----
   if (analysis == "child"){
