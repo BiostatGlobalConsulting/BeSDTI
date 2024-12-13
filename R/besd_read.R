@@ -31,10 +31,10 @@ besd_read <- function(file){
     indat <- paste0("Error: file extension ", infile_ext, " is not supported. Supported file extensions are: rds, csv, dta")
   }
 
-  if (is.data.frame(indat)){
-    new_varnames <- stringr::str_replace_all(names(indat), "\\.", "_")
-    names(indat) <- new_varnames
-  }
+  # if (is.data.frame(indat)){
+  #   new_varnames <- stringr::str_replace_all(names(indat), "\\.", "_")
+  #   names(indat) <- new_varnames
+  # }
 
   # Return:
   indat
