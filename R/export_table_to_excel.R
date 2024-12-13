@@ -5,6 +5,7 @@
 #' @param sheet Name of the sheet
 #' @param brief Produce a brief table or not, default to be TRUE
 #' @param VCP Current program name to be logged, default to be the function name
+#' @param noacname Suppress analysis counter from sheet names
 #'
 #' @return Sheet(s) with formatted output in an Excel file in OUTPUT_FOLDER
 #'
@@ -26,8 +27,10 @@
 # TO DO evaluate level4 references
 
 
-export_table_to_excel <- function(indicator, tablename = NULL, sheet = NULL, brief = TRUE,
-                                  VCP = "export_table_to_excel", droplvel4 = FALSE, noacname = FALSE){
+export_table_to_excel <- function(indicator, tablename = NULL, sheet = NULL,
+                                  brief = TRUE, VCP = "export_table_to_excel",
+                                  # droplvel4 = FALSE,
+                                  noacname = FALSE){
 
   besd_log_comment(VCP, 5, "Flow", "Starting")
 
@@ -52,7 +55,7 @@ export_table_to_excel <- function(indicator, tablename = NULL, sheet = NULL, bri
   exporttb <- get(tablename, envir = .GlobalEnv)
   exporttb <- exporttb %>% arrange(outputid) %>% select(-c(outputid))
 
-  # get the cell format from level4_layout
+  # get the cell format from output layout
   cellformat <- output_layout
 
   if (!"fmtid_for_first_column_r" %in% names(cellformat)){

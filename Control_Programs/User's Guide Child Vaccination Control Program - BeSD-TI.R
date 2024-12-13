@@ -1,7 +1,7 @@
 # BeSD-TI Control Program - Childhood Vaccination - Version 1.00 - 2024-10-16
 # Biostat Global Consulting
 
-# Behavioral and Social Drivers of Vaccination: Tools for Inference (BeSD-TI)
+# Behavioral and Social Drivers of Vaccination: Tools for Impact (BeSD-TI)
 # control program to analyze data from a childhood vaccination BeSD survey
 
 # Change log

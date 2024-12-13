@@ -1,7 +1,7 @@
 #' Generate output databases for DESC_03
 #'
 #' @param VCP Current program name to be logged, default to be the function name
-#' @param database_id Tag for file names
+#' @param database_id Custom tag for output file names (optional)
 #'
 #' @return Databases in OUTPUT_FOLDER
 

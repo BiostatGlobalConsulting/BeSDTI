@@ -1,6 +1,7 @@
 #' Check BeSD-TI analysis-related globals, datasets and variables
 #'
 #' @param VCP VCQI current program name to be logged, default to be the function name
+#' @param analysis Type of BeSD-TI analysis being performed ("child" or "covid")
 #'
 #' @import dplyr
 #' @import stringr
