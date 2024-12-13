@@ -8,6 +8,8 @@ besd_ch_core(VCP = "besd_ch_core", cleanup = TRUE)
 }
 \arguments{
 \item{VCP}{Current program name to be logged, default to be the function name}
+
+\item{cleanup}{Clean up global settings after run}
 }
 \value{
 Log entries; errors if conditions not met

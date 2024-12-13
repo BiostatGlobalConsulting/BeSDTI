@@ -6,6 +6,7 @@
 #' @param measureid Analysis indicator ID
 #' @param printprogress Progress tracking string to print
 #' @param VCP Current program name to be logged, default to be the function name
+#' @param database_id Custom tag for output file names (optional)
 #' @param ... Other arguments
 #'
 #' @return A database in OUTPUT_FOLDER
@@ -28,8 +29,6 @@
 #                                       variable name if no label; pass through
 #                                       subtitles and notes for report
 # *******************************************************************************
-
-# NOTE: functional, with some details pending (see TO DO notes)
 
 make_DESC_0203_output_database <- function(
     variable,

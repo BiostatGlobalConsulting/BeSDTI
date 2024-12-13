@@ -9,7 +9,7 @@ BESD_DESC_02_05TOST(VCP = "BESD_DESC_02_05TOST", database_id = NA)
 \arguments{
 \item{VCP}{Current program name to be logged, default to be the function name}
 
-\item{database_id}{Tag for file names}
+\item{database_id}{Custom tag for output file names (optional)}
 }
 \value{
 Sheet(s) in tabular output Excel file in OUTPUT_FOLDER

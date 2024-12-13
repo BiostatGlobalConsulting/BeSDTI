@@ -10,7 +10,6 @@ export_table_to_excel(
   sheet = NULL,
   brief = TRUE,
   VCP = "export_table_to_excel",
-  droplvel4 = FALSE,
   noacname = FALSE
 )
 }
@@ -24,6 +23,8 @@ export_table_to_excel(
 \item{brief}{Produce a brief table or not, default to be TRUE}
 
 \item{VCP}{Current program name to be logged, default to be the function name}
+
+\item{noacname}{Suppress analysis counter from sheet names}
 }
 \value{
 Sheet(s) with formatted output in an Excel file in OUTPUT_FOLDER

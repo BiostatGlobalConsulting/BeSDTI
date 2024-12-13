@@ -10,6 +10,8 @@ language_string(language_use, str, replaceq = FALSE)
 \item{language_use}{The global that stored the language the user choose}
 
 \item{str}{The string to be retrieved from the language file}
+
+\item{replaceq}{Option for rendering quotation marks}
 }
 \value{
 A string

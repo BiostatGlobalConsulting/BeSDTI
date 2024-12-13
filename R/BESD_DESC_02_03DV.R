@@ -1,7 +1,7 @@
 #' Calculate derived variables for BESD_DESC_02
 #'
 #' @param VCP Current program name to be logged, default to be the function name
-#' @param database_id Tag for file names
+#' @param database_id Custom tag for output file names (optional)
 #'
 #' @return A dataset (BESD_DESC_02_<ANALYSIS_COUNTER>_<BESD_DESC_02_COUNTER>)
 #'

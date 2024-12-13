@@ -8,6 +8,8 @@ check_besd_metadata(VCP = "check_besd_metadata", analysis)
 }
 \arguments{
 \item{VCP}{VCQI current program name to be logged, default to be the function name}
+
+\item{analysis}{Type of BeSD-TI analysis being performed ("child" or "covid")}
 }
 \value{
 Log entries; errors if conditions not met

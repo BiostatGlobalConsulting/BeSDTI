@@ -9,7 +9,7 @@ BESD_DESC_02_04GO(VCP = "BESD_DESC_02_04GO", database_id = NA)
 \arguments{
 \item{VCP}{Current program name to be logged, default to be the function name}
 
-\item{database_id}{Tag for file names}
+\item{database_id}{Custom tag for output file names (optional)}
 }
 \value{
 Databases in OUTPUT_FOLDER

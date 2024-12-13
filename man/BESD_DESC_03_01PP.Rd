@@ -8,6 +8,8 @@ BESD_DESC_03_01PP(VCP = "BESD_DESC_03_01PP", database_id = NA)
 }
 \arguments{
 \item{VCP}{Current program name to be logged, default to be the function name}
+
+\item{database_id}{Custom tag for output file names (optional)}
 }
 \value{
 A dataset (DESC_03_<ANALYSIS_COUNTER>_<DESC_03_COUNTER>)

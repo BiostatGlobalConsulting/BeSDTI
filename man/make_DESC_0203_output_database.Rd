@@ -28,6 +28,8 @@ make_DESC_0203_output_database(
 
 \item{VCP}{Current program name to be logged, default to be the function name}
 
+\item{database_id}{Custom tag for output file names (optional)}
+
 \item{...}{Other arguments}
 }
 \value{

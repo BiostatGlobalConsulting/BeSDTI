@@ -1,6 +1,12 @@
 #' Pre-process dataset to for DESC_02_05TOST/DESC_03_05TOST
 #'
 #' @param VCP Current program name to be logged, default to be the function name
+#' @param i Pass-through from TOST program
+#' @param db Pass-through from TOST program
+#' @param wtd Pass-through from TOST program
+#' @param indicator Pass-through from TOST program
+#' @param datname Pass-through from TOST program
+#' @param vid Pass-through from TOST program
 #'
 #' @return datasets
 #'

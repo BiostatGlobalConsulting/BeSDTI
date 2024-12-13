@@ -1,6 +1,7 @@
 #' Export datasets to Excel for DESC_03
 #'
 #' @param VCP Current program name to be logged, default to be the function name
+#' @param database_id Custom tag for output file names (optional)
 #'
 #' @return Sheet(s) in tabular output Excel file in OUTPUT_FOLDER
 #'

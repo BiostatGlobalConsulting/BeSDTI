@@ -16,6 +16,18 @@ format_desc0203_database(
 }
 \arguments{
 \item{VCP}{Current program name to be logged, default to be the function name}
+
+\item{i}{Pass-through from TOST program}
+
+\item{db}{Pass-through from TOST program}
+
+\item{wtd}{Pass-through from TOST program}
+
+\item{indicator}{Pass-through from TOST program}
+
+\item{datname}{Pass-through from TOST program}
+
+\item{vid}{Pass-through from TOST program}
 }
 \value{
 datasets
