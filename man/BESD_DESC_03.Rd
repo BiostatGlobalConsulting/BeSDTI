@@ -9,7 +9,7 @@ BESD_DESC_03(VCP = "BESD_DESC_03", database_id = NA, cleanup = FALSE)
 \arguments{
 \item{VCP}{Current program name to be logged, default to be the function name}
 
-\item{database_id}{Tag for file names}
+\item{database_id}{Custom tag for output file names (optional)}
 
 \item{cleanup}{Clean up DESC_03 global settings after run}
 }
