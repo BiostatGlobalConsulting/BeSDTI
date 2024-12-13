@@ -13,9 +13,7 @@
 # Code Block A                 (Do not change) ----
 
 # Load the BeSD-TI package
-# library(BeSDTI, attach.required = TRUE)
-setwd("C:/Users/clary/Biostat Global Dropbox/Caitlin Clary/CBC GitHub Repos/BeSDTI")
-devtools::load_all()
+library(BeSDTI, attach.required = TRUE)
 
 # Start with clear memory
 cleanup_BeSDTI_globals()
@@ -23,7 +21,7 @@ cleanup_BeSDTI_globals()
 # *************************************************
 # Code Block B               (User may change) ----
 
-DATA_FOLDER <- "Q:/WHO - BeSD support/CBC Working Folder"
+DATA_FOLDER <- "Q:/WHO - BeSD support/CBC Working Folder/BeSD Test Data"
 
 OUTPUT_FOLDER <- "Q:/WHO - BeSD support/CBC Working Folder/BeSD COVID Test Output"
 
@@ -60,10 +58,10 @@ besd_log_comment(VCP, 3, "Package",
 # .rds, .dta, .csv
 
 # Name of dataset that holds COVID-19 vaccination BeSD data
-besd_global(COV_DATASET, "BeSD_Covid_Data_Faux_2024-11-14.rds")
+besd_global(COV_DATASET, "BeSD_Covid_Data_Faux_2024-12-13.rds")
 
 # Name of dataset that holds cluster metadata (optional)
-besd_global(CM_DATASET, "BeSD_CM_COVID_Data_Faux_2024-11-14.rds")
+besd_global(CM_DATASET, "BeSD_CM_COVID_Data_Faux_2024-12-13.rds")
 
 # Surveys about the BeSD of COVID-19 vaccination are sometimes administered to
 # health workers and sometimes administered to a general population of adults.
